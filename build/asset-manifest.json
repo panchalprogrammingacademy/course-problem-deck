@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/course-problem-deck/static/css/main.5619fa09.chunk.css",
+    "main.js": "/course-problem-deck/static/js/main.009eaa53.chunk.js",
+    "main.js.map": "/course-problem-deck/static/js/main.009eaa53.chunk.js.map",
+    "runtime-main.js": "/course-problem-deck/static/js/runtime-main.db7688ff.js",
+    "runtime-main.js.map": "/course-problem-deck/static/js/runtime-main.db7688ff.js.map",
+    "static/js/2.e3c3ab17.chunk.js": "/course-problem-deck/static/js/2.e3c3ab17.chunk.js",
+    "static/js/2.e3c3ab17.chunk.js.map": "/course-problem-deck/static/js/2.e3c3ab17.chunk.js.map",
+    "index.html": "/course-problem-deck/index.html",
+    "static/css/main.5619fa09.chunk.css.map": "/course-problem-deck/static/css/main.5619fa09.chunk.css.map",
+    "static/js/2.e3c3ab17.chunk.js.LICENSE.txt": "/course-problem-deck/static/js/2.e3c3ab17.chunk.js.LICENSE.txt",
+    "static/media/404.49094bca.gif": "/course-problem-deck/static/media/404.49094bca.gif",
+    "static/media/CoursePage.scss": "/course-problem-deck/static/media/background.5023a7e0.jpg",
+    "static/media/ppa.22a730db.png": "/course-problem-deck/static/media/ppa.22a730db.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.db7688ff.js",
+    "static/js/2.e3c3ab17.chunk.js",
+    "static/css/main.5619fa09.chunk.css",
+    "static/js/main.009eaa53.chunk.js"
+  ]
+}

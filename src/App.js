@@ -9,7 +9,8 @@ export default function App() {
 		<Router>
 			<Switch>
 				<Route exact path="/" component={Homepage} />
-				<Route exact path="/course/:courseId" component={CoursePage} />
+				<Route exact path="/course/the-complete-c-course" 
+					component={()=> <CoursePage courseId='the-complete-c-course' />} />
 				<Route path="/" component={PageNotFound} />
 			</Switch>
 		</Router>
