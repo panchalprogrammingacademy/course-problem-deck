@@ -1,0 +1,17 @@
+#course-page{
+    padding: 20px;
+    background: url('../Assets/background.jpg') no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+
+    .header{
+        text-align: center;
+        color: white;
+        h1{
+            margin-bottom: 0px;
+            text-transform: uppercase;
+        }
+    }
+}
