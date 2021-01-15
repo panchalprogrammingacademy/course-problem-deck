@@ -20,8 +20,7 @@ export default function CoursePage(props){
     useEffect(function(){
         course_problems(courseId).then(response => {
             let {data} = response;
-            let {error} = data;
-            if (error)  setErrorMessage(error);
+            if (data.error)  setErrorMessage(data.error);
             else {
                 let problems = data.problems || [];
                 problems.sort( (i1, i2) => i1.title.localeCompare(i2.title));

@@ -1,0 +1,49 @@
+#login{
+    padding: 20px 50px;
+    .flash-message{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 5px;
+        border-radius: 5px;
+        button{
+            border: none;
+            background: transparent;
+        }
+    }
+    .error{
+        color: #842029;
+        background: #f5c2c7;
+        button{
+            color: #842029;
+        }
+    }
+    .success{
+        color: #0f5132;
+        background: #badbcc;
+        button{
+            color: #0f5132;
+        }
+    }
+    .form-group{
+        margin: 20px auto;
+        label{
+            display: block;
+        }
+        input{
+            border: 1px solid black;
+            width: 100%;
+            padding: 10px;
+            font-size: 20px;
+            border-radius: 10px;
+        }
+    }
+    button{
+        padding: 10px;
+        font-size: 20px;
+        cursor: pointer;
+        background: #6c757d;
+        color: white;
+        border-radius: 10px;
+    }
+}
