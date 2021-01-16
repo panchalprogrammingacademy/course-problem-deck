@@ -1,0 +1,57 @@
+#attempt-problem{
+    user-select: none;
+    -webkit-user-select: none;
+    display: flex;
+    justify-content: space-between;
+    overflow: hidden;
+    > div{
+        height: 100vh;
+        overflow: scroll;
+        border: 1px solid red;
+    }
+    .resizer{
+        width: 5px !important;
+        cursor: ew-resize;
+        border: 2px solid transparent;
+        overflow: hidden !important;    
+    }
+    .left, .right{ min-width: 30vw; width: 50vw;}
+    .left{
+        padding: 10px;
+        .problem-header{
+            font-weight: bold;
+            font-size: 30px;        
+        }
+        .problem-score{
+            text-transform: uppercase;
+        }
+        .tags{
+            .tags-header{
+                font-size: 18px;
+                font-weight: bold;
+            }
+            .tag{
+                display: inline-block;
+                background-color: whitesmoke;
+                border-radius: 10px;
+                padding: 5px;
+                margin: 5px 5px 0px 0px;            
+            }
+        }
+    }
+
+    .problem{
+        margin: 50px auto;
+        .ql-toolbar{display: none !important;}
+        .ql-container.ql-snow{border: none !important;}
+        .ql-editor{padding: 0px !important;}
+        pre.ql-syntax{
+            color: black !important;
+            background-color: white !important;
+            border: 1px solid darkgray;
+        }        
+    }
+    .right{
+        flex: 1;
+    }
+}

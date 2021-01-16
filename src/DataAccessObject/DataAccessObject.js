@@ -27,3 +27,12 @@ export const course_problems = (courseId) => {
                 .catch(err => reject(err));
     });
 };
+
+// reads the problem with given id
+export const fetch_problem = (problemId) => {
+    return new Promise(function(resolve, reject){
+        axios.get('/problem/' + problemId)
+            .then(response => resolve(response))
+                .catch(err => reject(err));
+    });
+};
