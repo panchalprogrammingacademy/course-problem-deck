@@ -4,10 +4,11 @@
     display: flex;
     justify-content: space-between;
     overflow: hidden;
+    height: 100vh;
+    width: 100vw;
     > div{
         height: 100vh;
         overflow: scroll;
-        border: 1px solid red;
     }
     .resizer{
         width: 5px !important;
@@ -16,7 +17,10 @@
         overflow: hidden !important;    
     }
     .left, .right{ min-width: 30vw; width: 50vw;}
+    .full-flex{flex: 1;}
     .left{
+        font-family: 'Libre Baskerville', serif; 
+        a{color: black !important;}
         padding: 10px;
         .problem-header{
             font-weight: bold;
@@ -43,7 +47,7 @@
     .problem{
         margin: 50px auto;
         .ql-toolbar{display: none !important;}
-        .ql-container.ql-snow{border: none !important;}
+        .ql-container.ql-snow{border: none !important; font-family: 'Libre Baskerville', serif;}
         .ql-editor{padding: 0px !important;}
         pre.ql-syntax{
             color: black !important;
@@ -53,5 +57,83 @@
     }
     .right{
         flex: 1;
+        .code-operations{
+            text-align: right;
+            font-family: 'Libre Baskerville', serif; 
+            font-size: 18px;
+            margin: 10px;
+            > button{
+                font-size: 18px;
+                background: transparent;
+                font-family: 'Libre Baskerville', serif; 
+                cursor: pointer;
+            }
+            .submit-code{
+                background: #28a745;
+                color: white;
+                border-radius: 5px;
+                padding: 10px;
+            }
+        }
+        .custom-test{
+            font-family: 'Libre Baskerville', serif; 
+            font-size: 15px;
+            padding: 10px;
+            padding-left: 0px;
+            margin: 5px;
+            margin-left: 0px;
+            > textarea, > input{
+                border: 1px solid black;
+                border-radius: 5px;
+                width: 95%;
+                padding: 10px;
+                font-family: 'Libre Baskerville', serif; 
+                font-size: 15px;
+                margin: 5px auto;
+            }
+            > textarea{
+                height: 100px;
+            }
+            textarea:focus, input:focus{
+                border-color: #9ecaed;
+                box-shadow: 0 0 2px #9ecaed;
+            }
+        }
+        .results{
+            border: 1px solid black;
+            padding: 5px;
+            display: flex;
+            .test-case-list{
+                .test-case{
+                    background: whitesmoke;
+                    padding: 5px;
+                    cursor: pointer;
+                    font-family: 'Libre Baskerville', serif; 
+                    font-size: 18px;
+                    min-width: 200px;
+                }
+                .selected-test-case{
+                    background: white;
+                    box-shadow: 0 2px 2px 2px gainsboro;
+                    -webkit-box-shadow: 0 2px 2px 2px gainsboro;
+                    
+                }
+            }
+            .test-case-result{
+                flex: 1;
+                font-family: 'Libre Baskerville', serif; 
+                font-size: 18px;
+                padding: 0px 10px 10px 10px;
+                textarea{
+                    font-family: 'Libre Baskerville', serif; 
+                    font-size: 15px;    
+                    width: 100%;
+                    background: whitesmoke;
+                    padding: 5px;
+                    overflow: scroll;
+                    resize: none;
+                }
+            }
+        }
     }
 }

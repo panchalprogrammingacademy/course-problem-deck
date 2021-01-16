@@ -1,0 +1,18 @@
+.code-editor{
+    #ace-editor{
+        font-size: 20px !important;
+        width: auto !important;
+        height: 350px !important;
+    }
+    .toolbar{
+        padding: 5px;
+        text-align: right;
+        select{
+            font-size: 20px;
+            background: white;
+            border: 1px solid black;
+            font-family: 'Libre Baskerville', serif;
+            margin-left: 10px;
+        }
+    }
+}
