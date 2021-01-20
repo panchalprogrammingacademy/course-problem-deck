@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import '../Styles/AttemptProblem.scss';
 import Loader0 from './Loader0';
+import Loader2 from './Loader2';
+import Loader3 from './Loader3';
 import PageNotFound from './PageNotFound';
 import ScreenResizer from './ScreenResizer';
 import {fetch_problem, execute_code} from '../DataAccessObject/DataAccessObject';
@@ -9,7 +11,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import CodeEditor from './CodeEditor';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUpload, faLock, faUnlockAlt, faPaw } from '@fortawesome/free-solid-svg-icons';
+import { faUpload, faLock, faUnlockAlt, faPaw, faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 export default function AttemptProblem(props){
     let problemId = props.match.params.problemId;
@@ -83,7 +85,6 @@ export default function AttemptProblem(props){
         if (disabled)   return;
         setDisabled(true);
         if (customTest) {
-            setCustomResult(null);
             execute_code(code, language, problem.timeLimit, customInput, customCMD)
             .then(response => {
                 let data = response.data;
@@ -95,7 +96,41 @@ export default function AttemptProblem(props){
                 setDisabled(false);
             });
         } else {
-
+            setScore(0);
+            let testCases = problem.testCases;
+            for (let i = 0; i < testCases.length; ++i){
+                testCases[i].loading = true;
+                testCases[i].executionScore = 0;
+                delete testCases[i].passed;
+            }
+            setProblem({...problem, testCases: testCases});
+            for (let i = 0; i < testCases.length; ++i) {
+                let  tc = testCases[i];
+                execute_code(code, language, problem.timeLimit, tc.input, tc.cmd)
+                .then(response => {
+                    let data = response.data;
+                    let executionOutput = data.error || data.stderr || data.stdout;
+                    let oldTestCases = problem.testCases;
+                    oldTestCases[i].loading = false;
+                    oldTestCases[i].passed = false;
+                    if (data.stdout) oldTestCases[i].passed = (tc.output.trim() === data.stdout.toString().trim());
+                    oldTestCases[i].executionScore = (oldTestCases[i].passed ? tc.points : 0);
+                    oldTestCases[i].executionOutput = executionOutput;
+                    setProblem({...problem, testCases: oldTestCases});
+                }).catch(err => {
+                    let executionOutput = err.toString();
+                    let oldTestCases = problem.testCases;
+                    oldTestCases[i].loading = false;
+                    oldTestCases[i].passed = false;
+                    oldTestCases[i].executionOutput = executionOutput;
+                    setProblem({...problem, testCases: oldTestCases});
+                }).finally(()=>{
+                    let newScore = problem.testCases.reduce((total, item) => total + item.executionScore, 0);
+                    setScore(newScore);
+                    let result = problem.testCases.reduce((result, item) => result || item.loading, false);
+                    if (!result) setDisabled(false);
+                });    
+            }
         }
     };
 
@@ -141,8 +176,13 @@ export default function AttemptProblem(props){
                     <input type="checkbox" checked={customTest}
                         onChange={event => setCustomTest(!customTest)} /> 
                     <span>Test against custom input</span> <br/>
-                    <button className="submit-code" disabled={disabled}
-                        onClick={onSubmitCode}>Submit code</button>
+                    <div className="button-container">
+                        {disabled && <Loader2 />}
+                        {!disabled &&
+                        <button className="submit-code" 
+                            onClick={onSubmitCode}>Submit code
+                        </button>}
+                    </div>
                 </div>
                 {customTest && 
                 <div className="custom-test">
@@ -163,8 +203,13 @@ export default function AttemptProblem(props){
                                     'test-case selected-test-case': 'test-case'}
                                     onClick={event => setSelectedTestCaseIndex(i)}
                                     key={i}>
-                                    <FontAwesomeIcon icon={tc.publicTestCase ? 
-                                        faUnlockAlt : faLock} /> Test Case {i  + 1}                              
+                                    <span>
+                                        <FontAwesomeIcon icon={tc.publicTestCase ? 
+                                        faUnlockAlt : faLock} /> Test Case {i  + 1}
+                                    </span>
+                                    {tc.loading && <Loader3 />}
+                                    {tc.passed === true && <FontAwesomeIcon icon={faCheck} className="accepted" />}
+                                    {tc.passed === false && <FontAwesomeIcon icon={faTimes} className="rejected" />}
                                 </div>
                             );
                         })}
@@ -185,7 +230,7 @@ export default function AttemptProblem(props){
                             <textarea value={problem.testCases[selectedTestCaseIndex].output}
                                 onChange={event => event.preventDefault()}/>
                             <div>Your output</div>
-                            <textarea value={problem.testCases[selectedTestCaseIndex].obtained}
+                            <textarea value={problem.testCases[selectedTestCaseIndex].executionOutput}
                                 onChange={event => event.preventDefault()}/>
                         </div>}
                     </div>

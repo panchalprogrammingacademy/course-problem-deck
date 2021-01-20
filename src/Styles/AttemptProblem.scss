@@ -68,12 +68,22 @@
                 font-family: 'Libre Baskerville', serif; 
                 cursor: pointer;
             }
-            .submit-code{
-                background: #28a745;
-                color: white;
-                border-radius: 5px;
-                padding: 10px;
+            .button-container{
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+                margin: 10px 0px;
+                .submit-code{
+                    background: #28a745;
+                    cursor: pointer;
+                    color: white;
+                    border-radius: 5px;
+                    padding: 10px;
+                    font-family: 'Libre Baskerville', serif; 
+                    font-size: 18px;
+                }    
             }
+
         }
         .custom-test{
             font-family: 'Libre Baskerville', serif; 
@@ -118,11 +128,20 @@
             .test-case-list{
                 .test-case{
                     background: whitesmoke;
-                    padding: 5px;
                     cursor: pointer;
                     font-family: 'Libre Baskerville', serif; 
                     font-size: 18px;
-                    min-width: 200px;
+                    padding: 5px 10px;
+                    width: 200px !important;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    .rejected{
+                        color: #842029;
+                    }
+                    .accepted{
+                        color: #0f5132;
+                    }
                 }
                 .selected-test-case{
                     background: white;
@@ -149,6 +168,8 @@
                     padding: 5px;
                     overflow: scroll;
                     resize: none;
+                    min-height: 80px;
+                    margin-bottom: 20px;
                 }
             }
         }
