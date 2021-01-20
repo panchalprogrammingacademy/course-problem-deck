@@ -1,7 +1,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-const baseurl = window.location.origin;
-// const baseurl = 'https://panchalprogrammingacademy.github.io/course-problem-deck';
+// const baseurl = window.location.origin;
+const baseurl = 'https://panchalprogrammingacademy.github.io/course-problem-deck';
 export default function ExternalLink(props){
     const {newWindow, external, to, className} = props;
     return (
