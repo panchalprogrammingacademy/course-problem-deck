@@ -6,6 +6,7 @@ import Loader1 from './Loader1';
 import {course_problems} from '../DataAccessObject/DataAccessObject';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
+import ExternalLink from './ExternalLink';
 
 export default function CoursePage(props){
     const courseId = props.courseId;
@@ -89,18 +90,15 @@ export default function CoursePage(props){
                     return (
                         <div className="problem" key={problem._id}>
                             {localStorage.getItem(problem._id) && <span><FontAwesomeIcon icon={faCheck} /></span>}
-                            <a href="/" className="problem-title"
-                                onClick={event => {
-                                    event.preventDefault();
-                                    let url = window.location.origin + "/#/problem/" + problem._id;
-                                    window.open(url, '_blank');
-                                }}>{problem.title}</a>
+                            <ExternalLink to={"/problem/" + problem._id} 
+                                newWindow={true} className="problem-title">
+                                {problem.title}
+                            </ExternalLink>
                         </div>
                     );
                 })}
                 {filteredProblems.length === 0 && <div className="empty-message">Oops, nothing to show here!</div>}
             </div>}
-
             <Fotter />
         </div>
     );

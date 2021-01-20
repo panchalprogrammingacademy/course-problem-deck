@@ -1,7 +1,7 @@
 import React from 'react';
 import '../Styles/homepage.scss';
 import AcademyIcon from '../Assets/ppa.png';
-import {HashLink as Link} from 'react-router-hash-link';
+import ExternalLink from './ExternalLink';
 import Fotter from './Fotter';
 
 const homepage = (props) => {
@@ -29,28 +29,17 @@ const homepage = (props) => {
                                 <h1>{course.title}</h1>
                                 <p className="instructor">{course.instructor}</p>
                                 <p className="subtitle">{course.subtitle}</p>
-                                <Link to="/" onClick={event => {
-                                    event.preventDefault();
-                                    window.open(course.courseLink, '_blank');
-                                }} className="browse-course">Browse Course</Link>
-                                <Link to={"/course/" + course.id} className="browse-problems">Browse Problems</Link>
+                                <ExternalLink newWindow={true} external={true}
+                                    to={course.courseLink}
+                                    className="browse-course">Browse Course</ExternalLink>
+                                <ExternalLink to={"/course/" + course.id}
+                                    className="browse-problems">Browse Problems</ExternalLink>
                             </div>
                         );
                     });
                 }()}
             </div>
             <Fotter />
-            {/* <div className="fotter">
-                Copyright &copy; 2020 <Link to="/" onClick={event => {
-                    event.preventDefault();
-                    window.location.href = "http://panchalprogrammingacademy.herokuapp.com"
-                }}>Panchal Programming Academy</Link><br/>
-                Made with <span><FontAwesomeIcon icon={faHeart}/></span> by <Link 
-                    to="/" onClick={event => {
-                    event.preventDefault();
-                    window.location.href = 'http://shubhampanchal.herokuapp.com'
-                }}>Shubham Panchal</Link>
-            </div> */}
         </div>
     );
 };

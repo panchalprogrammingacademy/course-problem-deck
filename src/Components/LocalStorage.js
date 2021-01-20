@@ -5,6 +5,7 @@ import Fotter from './Fotter';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt, faFileDownload } from '@fortawesome/free-solid-svg-icons';
 import { useToasts } from 'react-toast-notifications';
+import ExternalLink from './ExternalLink';
 
 // component to be rendered
 export default function LocalStorage(props){
@@ -73,12 +74,16 @@ export default function LocalStorage(props){
                                 <span onClick={event => downloadItem(id)}>
                                     <FontAwesomeIcon style={{color: "black", cursor: "pointer"}} icon={faFileDownload} />
                                 </span>
-                                <a href="/" className="problem-title"
+                                <ExternalLink to={"/problem/" + id} 
+                                    className="problem-title" newWindow={true}>
+                                    {solution.title}
+                                </ExternalLink>
+                                {/* <a href="/" className="problem-title"
                                     onClick={event => {
                                         event.preventDefault();
                                         let url = window.location.origin + "/#/problem/" + id;
                                         window.open(url, '_blank');
-                                    }}>{solution.title}</a>
+                                    }}>{solution.title}</a> */}
                             </div>
                         ));
                     }
