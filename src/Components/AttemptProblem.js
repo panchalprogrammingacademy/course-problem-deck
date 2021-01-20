@@ -3,13 +3,13 @@ import '../Styles/AttemptProblem.scss';
 import Loader0 from './Loader0';
 import PageNotFound from './PageNotFound';
 import ScreenResizer from './ScreenResizer';
-import {fetch_problem} from '../DataAccessObject/DataAccessObject';
+import {fetch_problem, execute_code} from '../DataAccessObject/DataAccessObject';
 import { useToasts } from 'react-toast-notifications';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import CodeEditor from './CodeEditor';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUpload, faLock, faUnlockAlt } from '@fortawesome/free-solid-svg-icons';
+import { faUpload, faLock, faUnlockAlt, faPaw } from '@fortawesome/free-solid-svg-icons';
 
 export default function AttemptProblem(props){
     let problemId = props.match.params.problemId;
@@ -18,9 +18,16 @@ export default function AttemptProblem(props){
     const [problem, setProblem] = useState(null);
     const [print, setIsPrint] = useState(false);
     const [code, setCode] = useState('');
+    const [language, setLanguage] = useState('C');
     const [customTest, setCustomTest] = useState(false);
     const [selectedTestCaseIndex, setSelectedTestCaseIndex] = useState(0);
+    const [customInput, setCustomInput] = useState('');
+    const [customCMD, setCustomCMD] = useState('');
+    const [customResult, setCustomResult] = useState(null);
+    const [disabled, setDisabled] = useState(false);
     const { addToast } = useToasts();
+    const [maxScore, setMaxScore] = useState(0);
+    const [score, setScore] = useState(0);
 
 
 
@@ -36,12 +43,11 @@ export default function AttemptProblem(props){
                 setNotFound(<PageNotFound />);
             } else {
                 setProblem(data.problem);
+                setMaxScore(data.problem.testCases.reduce((total, item) => total + item.points, 0))
                 console.log(data.problem);
             }
         }).catch(err => {
-            addToast(err.toString(), {
-                appearance: 'error',
-            });
+            addToast(err.toString(), {appearance: 'error'});
         }).finally(()=>{
             setIsLoading(false);
         });
@@ -72,6 +78,27 @@ export default function AttemptProblem(props){
         input.click();
     };
 
+    // handles the submit-code request
+    const onSubmitCode = (event) => {
+        if (disabled)   return;
+        setDisabled(true);
+        if (customTest) {
+            setCustomResult(null);
+            execute_code(code, language, problem.timeLimit, customInput, customCMD)
+            .then(response => {
+                let data = response.data;
+                if (data.error) setCustomResult({isError: true, message: data.error});
+                else            setCustomResult({isError: false, message: data.stdout + data.stderr})
+            }).catch(err => {
+                addToast(err.toString(), {appearance: 'error'});  
+            }).finally(()=>{
+                setDisabled(false);
+            });
+        } else {
+
+        }
+    };
+
     // decide the component to be rendered
     if (isLoading) return <Loader0 />
     if (notFound)   return notFound;
@@ -85,7 +112,7 @@ export default function AttemptProblem(props){
                     {problem.title}
                 </div>
                 <div className="problem-score">
-                    {problem.testCases.reduce((total, item) => total + item.points, 0)} points
+                    {maxScore} points
                 </div>
                 <ReactQuill defaultValue={problem.problemStatement} readOnly
                     className="problem"/>
@@ -105,7 +132,8 @@ export default function AttemptProblem(props){
             {!print && <ScreenResizer />}
             {!print &&
             <div className="right" id="right">
-                <CodeEditor code={code} setCode={setCode}/>
+                <CodeEditor code={code} setCode={setCode}
+                    language={language} setLanguage={setLanguage}/>
                 <div className="code-operations">
                     <button onClick={uploadCode}>
                         <FontAwesomeIcon icon={faUpload}/> Upload code
@@ -113,14 +141,19 @@ export default function AttemptProblem(props){
                     <input type="checkbox" checked={customTest}
                         onChange={event => setCustomTest(!customTest)} /> 
                     <span>Test against custom input</span> <br/>
-                    <button className="submit-code">Submit code</button>
+                    <button className="submit-code" disabled={disabled}
+                        onClick={onSubmitCode}>Submit code</button>
                 </div>
                 {customTest && 
                 <div className="custom-test">
+                    {customResult && 
+                    <div className={customResult.isError ? "error-result" : "success-result"}>
+                        {customResult.message}
+                    </div>}
                     <div>Custom Input</div>
-                    <textarea />
+                    <textarea value={customInput} onChange={event => setCustomInput(event.target.value)} />
                     <div>Command Line Arguments (if any) </div>
-                    <input type="text" />
+                    <input type="text" value={customCMD} onChange={event => setCustomCMD(event.target.value)}/>
                 </div>}
                 <div className="results">
                     <div className="test-case-list">
@@ -135,6 +168,9 @@ export default function AttemptProblem(props){
                                 </div>
                             );
                         })}
+                        <div className="user-score">
+                            <FontAwesomeIcon icon={faPaw} /> Score: {score}/{maxScore}
+                        </div>
                     </div>
                     <div className="test-case-result">
                         {!problem.testCases[selectedTestCaseIndex].publicTestCase && 

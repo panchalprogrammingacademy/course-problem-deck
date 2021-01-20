@@ -39,15 +39,13 @@ import 'ace-builds/src-noconflict/theme-tomorrow_night_eighties';
 import 'ace-builds/src-noconflict/theme-twilight';
 import 'ace-builds/src-noconflict/theme-vibrant_ink';
 import 'ace-builds/src-noconflict/theme-xcode';
-
-
 import 'ace-builds/src-noconflict/mode-c_cpp';
 import 'ace-builds/src-noconflict/mode-python';
 
+
+// functional component
 export default function CodeEditor(props){
-    const {code, setCode} = props;
-    const [editorMode, setEditorMode] = useState('c_cpp');
-    const [editorTheme, setEditorTheme] = useState('eclipse');
+    // configurations
     const themes = [
         {theme: 'ambiance', text: 'Ambiance'},
         {theme: 'chaos', text: 'Chaos'},
@@ -88,11 +86,22 @@ export default function CodeEditor(props){
         {theme: 'vibrant_ink', text: 'Vibrant Ink'},
         {theme: 'xcode', text: 'XCode'},                
     ];
-    const languages = [
-        {lang: 'C',         mode: 'c_cpp'},
-        {lang: 'Python2',   mode: 'python'},
-        {lang: 'Python3',   mode: 'python'},
-    ];
+    const langModeMapping = {
+        'C' : 'c_cpp',
+        'Python2': 'python',
+        'Python3': 'python'
+    };
+    // [
+    //     {lang: 'C',         mode: 'c_cpp'},
+    //     {lang: 'Python2',   mode: 'python'},
+    //     {lang: 'Python3',   mode: 'python'},
+    // ];
+
+    // states for maintaing component
+    const {code, setCode, language, setLanguage} = props;
+    // let defaultMode = langModeMapping[language];
+    // const [editorMode, setEditorMode] = useState(defaultMode);
+    const [editorTheme, setEditorTheme] = useState('eclipse');
 
     return (
         <div className="code-editor">
@@ -102,13 +111,23 @@ export default function CodeEditor(props){
                     {themes.map(theme => <option key={theme.theme} 
                         value={theme.theme}>{theme.text}</option>)}
                 </select>
-                <select onChange={event => setEditorMode(event.target.value)}
-                    value={editorMode}> 
-                    {languages.map(lang => <option key={lang.lang} 
-                        value={lang.mode}>{lang.lang}</option>)}
+                <select onChange={event => setLanguage(event.target.value)} 
+                    value={language}>
+                    {function(){
+                        let items = [];
+                        for (let lang in langModeMapping){
+                            let item = (
+                                <option key={lang} value={lang}>{lang}</option>
+                            );
+                            items.push(item);
+                        }
+                        return items;
+                    }()} 
+                    {/* {languages.map(lang => <option key={lang.lang} 
+                        value={lang.mode}>{lang.lang}</option>)} */}
                 </select>
             </div>
-            <AceEditor mode={editorMode} theme={editorTheme}
+            <AceEditor mode={langModeMapping[language]} theme={editorTheme}
                 value={code} onChange={setCode}/>
         </div>
     );

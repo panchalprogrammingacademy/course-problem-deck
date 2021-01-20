@@ -28,7 +28,7 @@ export default function CoursePage(props){
                 setFilteredProblems(problems);
             }
         }).catch(error => {
-            setErrorMessage(error);
+            setErrorMessage(error.toString());
         }).finally(() => {
             setIsLoading(false);
         });

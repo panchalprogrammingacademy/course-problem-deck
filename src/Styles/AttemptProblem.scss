@@ -98,6 +98,18 @@
                 border-color: #9ecaed;
                 box-shadow: 0 0 2px #9ecaed;
             }
+            .error-result{
+                background: #f8d7da;
+                color: #842029;
+                padding: 10px;
+                margin-bottom: 20px;
+            }
+            .success-result{
+                background: #d1e7dd;
+                color: #0f5132;
+                padding: 10px;
+                margin-bottom: 20px;
+            }
         }
         .results{
             border: 1px solid black;
@@ -118,6 +130,11 @@
                     -webkit-box-shadow: 0 2px 2px 2px gainsboro;
                     
                 }
+                .user-score{
+                    font-family: 'Libre Baskerville', serif; 
+                    font-size: 18px;
+                    padding: 5px;
+                }
             }
             .test-case-result{
                 flex: 1;
@@ -136,4 +153,8 @@
             }
         }
     }
+}
+.react-toast-notifications__toast__content{
+    font-family: 'Libre Baskerville', serif !important; 
+    font-size: 18px !important;
 }
