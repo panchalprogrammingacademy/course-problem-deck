@@ -5,6 +5,7 @@ import CoursePage from './Components/CoursePage';
 import PageNotFound from './Components/PageNotFound';
 import Login from './Components/Login';
 import AttemptProblem from './Components/AttemptProblem';
+import LocalStorage from './Components/LocalStorage';
 import { ToastProvider } from 'react-toast-notifications';
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
 					<Route exact path="/course/the-complete-c-course" 
 						component={()=> <CoursePage courseId='the-complete-c-course' />} />
 					<Route exact path="/problem/:problemId" component={AttemptProblem} />
+					<Route path="/localStorage" component={LocalStorage} />
 					<Route path="/" component={PageNotFound} />
 				</Switch>
 			</Router>

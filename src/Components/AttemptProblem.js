@@ -148,7 +148,7 @@ export default function AttemptProblem(props){
     const onClose = ()=> setShowModal(false);
     const onSave = ()=> {
         // get solution information
-        let contentToSave = {code,language,timestamp: new Date()};
+        let contentToSave = {title: problem.title, code,language,timestamp: new Date()};
         // store the item in local-storage
         localStorage.setItem(problem._id, JSON.stringify(contentToSave));
         // hide the modal
