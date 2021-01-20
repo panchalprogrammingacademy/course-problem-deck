@@ -1,0 +1,91 @@
+.modal{
+    position: fixed;
+    z-index: 1000;
+    height: 100vw;
+    width: 100vw;
+    .modal-content{
+        background: white;
+        display: flex;
+        flex-direction: column;
+        opacity: 1.0;
+        font-family: 'Libre Baskerville', serif;
+        font-size: 20px;
+        width: 50vw;
+        border-radius: 10px;
+        margin: 10px auto;
+        > div{
+            padding: 10px;
+        }
+        .modal-header{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid gainsboro;
+            svg{
+                cursor: pointer;
+            }
+        }
+        .modal-body{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            img{
+                width: 200px;
+            }
+            .message{
+                font-size: 18px;
+                margin-bottom: 20px;
+            }
+            button{
+                background: transparent;
+                border: none;
+                outline-width: 0px;
+                cursor: pointer;
+                color: white;
+                font-size: 20px;
+                font-family: 'Libre Baskerville', serif;
+                padding: 10px;
+                margin-right: 10px;
+                border-radius: 5px;
+            }
+            .danger{
+                background: #dc3543;
+            }
+            .success{
+                background: #28a745;
+            }
+        }
+
+
+    }
+    .drop-animation{
+        animation: drop-animation 1s forwards;
+    }
+    @keyframes drop-animation {
+        0% {
+            transform-origin: center;
+            opacity: 0.1;
+          }
+          20% {
+            transform: 
+              translate3d(0, 10px, 0);
+            opacity: 0.2;
+          }
+          40%, 45% {
+            transform: 
+              translate3d(0, 10px, 0);
+            opacity: 0.5;
+          }
+          to {
+            opacity: 1;
+            transform: 
+              translate3d(0, 50px, 0);
+          }
+    }
+      
+    .box-shadow{
+        -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+        -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    }
+}

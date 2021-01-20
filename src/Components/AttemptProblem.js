@@ -4,6 +4,7 @@ import Loader0 from './Loader0';
 import Loader2 from './Loader2';
 import Loader3 from './Loader3';
 import PageNotFound from './PageNotFound';
+import Modal from './Modal';
 import ScreenResizer from './ScreenResizer';
 import {fetch_problem, execute_code} from '../DataAccessObject/DataAccessObject';
 import { useToasts } from 'react-toast-notifications';
@@ -30,6 +31,7 @@ export default function AttemptProblem(props){
     const { addToast } = useToasts();
     const [maxScore, setMaxScore] = useState(0);
     const [score, setScore] = useState(0);
+    const [showModal, setShowModal] = useState(false);
 
 
 
@@ -46,7 +48,14 @@ export default function AttemptProblem(props){
             } else {
                 setProblem(data.problem);
                 setMaxScore(data.problem.testCases.reduce((total, item) => total + item.points, 0))
-                console.log(data.problem);
+                let oldSolution = localStorage.getItem(data.problem._id);
+                if (oldSolution) {
+                    let jsonObject = JSON.parse(oldSolution);
+                    setLanguage(jsonObject.language);
+                    setCode(jsonObject.code);
+                    let date = new Date(jsonObject.timestamp);
+                    addToast('You solved this problem on ' + date.toLocaleString("en-US", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }), {appearance: 'info'});
+                }
             }
         }).catch(err => {
             addToast(err.toString(), {appearance: 'error'});
@@ -127,11 +136,23 @@ export default function AttemptProblem(props){
                 }).finally(()=>{
                     let newScore = problem.testCases.reduce((total, item) => total + item.executionScore, 0);
                     setScore(newScore);
+                    if (newScore === maxScore)  setShowModal(true);
                     let result = problem.testCases.reduce((result, item) => result || item.loading, false);
                     if (!result) setDisabled(false);
                 });    
             }
         }
+    };
+
+
+    const onClose = ()=> setShowModal(false);
+    const onSave = ()=> {
+        // get solution information
+        let contentToSave = {code,language,timestamp: new Date()};
+        // store the item in local-storage
+        localStorage.setItem(problem._id, JSON.stringify(contentToSave));
+        // hide the modal
+        setShowModal(false);
     };
 
     // decide the component to be rendered
@@ -141,6 +162,7 @@ export default function AttemptProblem(props){
     document.title = problem.title + " | Course Problem Deck";
     return (
         <div id="attempt-problem">
+            {showModal && <Modal onClose={onClose} onSave={onSave} />}
             <div className={`left ${print ? 'full-flex' : ''}`} id="left">
                 {print && <a href="/">{window.location.href}</a>}
                 <div className="problem-header">
