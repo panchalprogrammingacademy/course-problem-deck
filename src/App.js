@@ -7,7 +7,10 @@ import Login from './Components/Login';
 import AttemptProblem from './Components/AttemptProblem';
 import LocalStorage from './Components/LocalStorage';
 import { ToastProvider } from 'react-toast-notifications';
+require('dotenv').config();
+process.env.CI = false;
 export default function App() {
+	console.log(process.env);
   return (
     <div className="App">
 		<ToastProvider>
