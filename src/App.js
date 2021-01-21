@@ -1,5 +1,5 @@
 import React from 'react';
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import {HashRouter as Router, Route, Switch} from 'react-router-dom';
 import Homepage from './Components/Homepage';
 import CoursePage from './Components/CoursePage';
 import PageNotFound from './Components/PageNotFound';
@@ -7,10 +7,9 @@ import Login from './Components/Login';
 import AttemptProblem from './Components/AttemptProblem';
 import LocalStorage from './Components/LocalStorage';
 import { ToastProvider } from 'react-toast-notifications';
-require('dotenv').config();
-process.env.CI = false;
+
+// component to be rendered!
 export default function App() {
-	console.log(process.env);
   return (
     <div className="App">
 		<ToastProvider>
