@@ -1,0 +1,145 @@
+#problem-editor{
+    font-family: 'Libre Baskerville', serif !important;
+    .header{
+        text-align: center;
+        h1{
+            text-transform: uppercase;
+        }
+        .link{
+            color: black !important;
+            text-decoration: none;
+            padding-left: 5px;
+        }
+    }
+
+    .input-group{
+        // display: grid;
+        margin: 10px;
+        width: 100%;
+        label{
+            font-size: 18px;
+            margin: 10px 0px;
+            display: block;
+        }
+        input, textarea{
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 18px;
+            padding: 10px;
+            font-family: 'Libre Baskerville', serif !important;
+            width: -webkit-fill-available;
+        }
+        textarea{
+            height: 100px;
+            resize: none;
+        }
+    }
+
+    .problem-meta-data{
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+    }
+
+    .quill-editor-container{
+        .quill{
+            margin: 10px;
+            font-family: 'Libre Baskerville', serif !important;
+        }
+        .ql-toolbar{
+            font-family: 'Libre Baskerville', serif !important;
+        }
+        .ql-editor{
+            min-height: 250px;
+            font-family: 'Libre Baskerville', serif !important;
+        }
+        .ql-tooltip{
+            left: 0px !important;
+            font-family: 'Libre Baskerville', serif !important;
+            input{
+                font-family: 'Libre Baskerville', serif !important;
+            }
+        }
+        pre.ql-syntax{
+            color: black !important;
+            background-color: white !important;
+            border: 1px solid darkgray;
+        }        
+    }
+
+    .tags-container{
+        > div{
+            width: auto;
+        }
+        .tags{
+            .tag{
+                display: inline-block;
+                background-color: whitesmoke;
+                padding: 5px; margin-right: 5px; 
+                margin-bottom: 5px;
+                border-radius: 10px;
+                font-family: 'Libre Baskerville', serif;
+                button{
+                    cursor: pointer; 
+                    color: black !important;
+                    background: transparent;
+                    border: none;
+                    outline-width: 0px;
+                }
+            }
+        }
+    }
+
+    .test-cases-container{
+        .test-case{
+            border: 1px solid black;
+            margin: 10px;
+            padding: 10px;
+            .header{
+                display: flex;
+                align-items: center;
+                font-size: 18px;
+                button{
+                    background: #dc3545;
+                    color: white;
+                    font-size: 20px;
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50%;
+                    cursor: pointer;
+                    margin: 0px 10px;
+                }
+            }
+            .col-2{
+                display: flex;
+                div:nth-child(1){
+                    margin-left: 0px;
+                }
+            }
+        }
+    }
+
+    .sticky-footer{
+        text-align: right;
+        position: fixed;
+        bottom: 0px;
+        right: 0px;
+        z-index: 2;
+        button{
+            font-size: 30px;
+            border-radius: 50%;
+            height: 50px;
+            width: 50px;
+            margin: 10px;
+            cursor: pointer;
+            color: white;
+            background: transparent;
+        }
+        .success{
+            background: #28a745;
+        }
+        .info{
+            background: #17a2b8;
+        }
+    }
+}

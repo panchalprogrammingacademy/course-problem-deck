@@ -20,7 +20,8 @@ const pageNotFound = (props) => {
             <div style={{textAlign: 'center'}}>
                 <p style={{
                     fontSize: '20px',
-                    textAlign: 'center'
+                    textAlign: 'center',
+                    fontFamily: `'Libre Baskerville', serif`
                 }}>
                     Uh oh! The page you are looking for does not exist! <br/>
                 </p>
@@ -31,7 +32,8 @@ const pageNotFound = (props) => {
                         borderRadius: '10px',
                         margin: '10px',
                         textDecoration: 'none',
-                        fontSize: '20px'
+                        fontSize: '20px',
+                        fontFamily: `'Libre Baskerville', serif`
                 }}>Home</Link>
             </div>
         </div>

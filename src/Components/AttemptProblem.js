@@ -91,6 +91,7 @@ export default function AttemptProblem(props){
 
     // handles the submit-code request
     const onSubmitCode = (event) => {
+        if (!event.isTrusted)   return;
         if (disabled)   return;
         setDisabled(true);
         if (customTest) {

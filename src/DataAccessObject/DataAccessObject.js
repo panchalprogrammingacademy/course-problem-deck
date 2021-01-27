@@ -1,7 +1,6 @@
 import axios from 'axios';
-axios.defaults.baseURL = process.env.BASE_URL;
-// axios.defaults.baseURL = 'http://localhost:8080';
-axios.defaults.baseURL = 'https://course-problem-deck-server.herokuapp.com';
+axios.defaults.baseURL = 'http://localhost:8080';
+// axios.defaults.baseURL = 'https://course-problem-deck-server.herokuapp.com';
 
 
 // logins the user with given credentials

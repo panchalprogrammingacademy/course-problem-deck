@@ -10,8 +10,8 @@ const homepage = (props) => {
         {
             id: 'the-complete-c-course',
             title: 'The Complete C Course',
-            subtitle: 'Learn C in this course and become a Computer Programmer. Obtain valuable C skills and problem solving strategy!',
-            instructor: 'Shubham Panchal (B.Tech 3rd CSE, IIT Hyderabad)',
+            subtitle: 'Learn C in this course and become a Computer Programmer. Obtain valuable C skills and problem solving strategy! Build portfolio projects and explore basic data-structures and algorithms!',
+            instructor: 'Shubham Panchal (B.Tech 3rd year CSE, IIT Hyderabad)',
             courseLink: 'https://www.udemy.com/course/the-complete-c-course-ppa/?referralCode=E8FBBBCC47B68F60F275'
         },
     ];

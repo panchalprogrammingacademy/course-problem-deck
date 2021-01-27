@@ -1,5 +1,5 @@
 #login{
-    padding: 20px 50px;
+    padding: 50px;
     font-family: 'Libre Baskerville', serif; 
     .flash-message{
         display: flex;
@@ -30,21 +30,28 @@
         margin: 20px auto;
         label{
             display: block;
+            margin: 10px auto;
         }
         input{
-            border: 1px solid black;
-            width: 100%;
+            border: 1px solid #ced4da;
+            width: -webkit-fill-available;
             padding: 10px;
             font-size: 20px;
-            border-radius: 10px;
+            border-radius: 5px;
+            font-family: 'Libre Baskerville', serif; 
+        }
+        input:focus{
+            outline-width: 2px;
+            outline-color: #92a8d1;
         }
     }
     button{
         padding: 10px;
         font-size: 20px;
         cursor: pointer;
-        background: #6c757d;
+        background: #007bff;
         color: white;
-        border-radius: 10px;
+        border-radius: 5px;
+        font-family: 'Libre Baskerville', serif; 
     }
 }
