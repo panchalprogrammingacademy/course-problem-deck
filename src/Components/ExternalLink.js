@@ -1,7 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-const baseurl = window.location.origin;
-// const baseurl = 'https://panchalprogrammingacademy.github.io/course-problem-deck';
+import {CLIENT_URL} from '../DataAccessObject/DataAccessObject';
 
 
 // component to be rendered
@@ -9,7 +8,7 @@ export default function ExternalLink(props){
     const {newWindow, external, to, className} = props;
     let url = null;
     if (external) url = to;
-    else          url = baseurl + "/#" + to;
+    else          url = CLIENT_URL + "/#" + to;
     return (
         <Link to={url} className={className}
             onClick={event => {

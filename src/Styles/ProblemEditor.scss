@@ -1,5 +1,10 @@
 #problem-editor{
     font-family: 'Libre Baskerville', serif !important;
+    .loader{
+        .lds-facebook div {
+            background: gray !important;
+        }        
+    }
     .header{
         text-align: center;
         h1{
@@ -134,12 +139,21 @@
             cursor: pointer;
             color: white;
             background: transparent;
+            a{
+                color: white !important;
+            }
         }
         .success{
-            background: #28a745;
+            background: #505250;
         }
         .info{
             background: #17a2b8;
         }
+        .secondary{
+            background: #04414d;
+        }
+        // .browse-problem{
+        //     background: black;
+        // }
     }
 }

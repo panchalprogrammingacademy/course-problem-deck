@@ -11,7 +11,7 @@ import ProblemEditor from './Components/ProblemEditor';
 
 // checks if the user has the token
 function hasToken(){
-	return true;
+	return false;
 }
 
 // defines the private route
@@ -34,6 +34,7 @@ export default function App() {
 			<Router>
 				<Switch>
 					<PrivateRoute exact path="/admin/problem/new" component={ProblemEditor} />
+					<PrivateRoute exact path="/admin/problem/edit/:problemId" component={ProblemEditor} />
 					<Route exact path="/admin/login" component={Login} />
 
 					<Route exact path="/" component={Homepage} />

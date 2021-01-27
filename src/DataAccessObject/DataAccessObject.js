@@ -1,7 +1,7 @@
 import axios from 'axios';
 axios.defaults.baseURL = 'http://localhost:8080';
 // axios.defaults.baseURL = 'https://course-problem-deck-server.herokuapp.com';
-
+export const CLIENT_URL = 'http://localhost:3000'
 
 // logins the user with given credentials
 export const admin_login = (email, password) => {
@@ -35,6 +35,16 @@ export const fetch_problem = (problemId) => {
                 .catch(err => reject(err));
     });
 };
+// saves the problem
+export const save_problem = (problemId, title, timeLimit, problemStatement, tags, testCases) => {
+    let payload = {problemId, title, timeLimit, problemStatement, tags, testCases};
+    return new Promise(function(resolve, reject){
+        axios.post('/admin/problem/save', payload)
+            .then(response => resolve(response))
+                .catch(err => reject(err));
+    });
+};
+
 // executes the user's source code
 export const execute_code = (sourceCode, language, timeLimit, input, cmd) => {
     const payload = {sourceCode, language, timeLimit, input, cmd};

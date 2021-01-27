@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import '../Styles/ProblemEditor.scss';
 import ExternalLink from './ExternalLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faCalendarCheck, faTimes, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faCalendarCheck, faTimes, faTrash, faDirections } from '@fortawesome/free-solid-svg-icons';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useToasts } from 'react-toast-notifications';
+import Loader1 from './Loader1';
+import {fetch_problem, save_problem, CLIENT_URL} from '../DataAccessObject/DataAccessObject';
 
 
 // configuration for quill-editor
@@ -27,6 +29,10 @@ const EditorModules = {
 
 // functional component
 export default function ProblemEditor(props){
+
+    const params = props.match.params;
+    const [problemId, setProblemId] = useState(params.problemId);
+    const [isLoading, setIsLoading] = useState(false);
     const [title, setTitle] = useState('');
     const [timeLimit, setTimeLimit] = useState(1000);
     const [problemStatement, setProblemStatement] = useState('');
@@ -34,6 +40,7 @@ export default function ProblemEditor(props){
     const [tagText, setTagText] = useState('');
     const [testCases, setTestCases] = useState([]);
     const { addToast } = useToasts();
+
 
     // event handler for add tag
     const onAddTagHandler = (event) => {
@@ -50,7 +57,7 @@ export default function ProblemEditor(props){
     const onAddTestCaseHandler = (event) => {
         let testCase = {
             publicTestCase: false,
-            input: `test case ${testCases.length + 1}`,
+            input: '',
             output: '',
             cmd: '',
             points: 5,
@@ -73,8 +80,44 @@ export default function ProblemEditor(props){
     };
 
     // displays the toast with error message
-    const flagError = (message) => addToast(message, {appearance: 'error', autoDismiss: false});
+    const flagError = useCallback((message) => addToast(message, {appearance: 'error', autoDismiss: false}), [addToast]);
+    // update the properties of the problem
+    const handleAPISuccess = useCallback((response, saved) => {
+        let {data} = response;
+        let {problem} = data;
+        if (!problem)   return flagError(`Server couldn't find that problem!`);
+        // update all the properties of the problem
+        setTitle(problem.title);
+        setTimeLimit(problem.timeLimit);
+        setProblemStatement(problem.problemStatement);
+        setTags(problem.tags);
+        setTestCases(problem.testCases);
+        setProblemId(problem._id);        
+        // update the location to edit
+        window.location.href = CLIENT_URL + "/#/admin/problem/edit/" + problem._id;
+        // display toast on success
+        if (saved) addToast(`Your problem was successfully saved!`, {appearance: 'success', autoDismiss: false});
+    }, [flagError, addToast]);
+    // handles the API error
+    const handleAPIError = useCallback((error) => {
+        console.log(error);
+        let {response} = error;
+        let {data} = response;
+        let {message} = data;
+        flagError(message);
+    }, [flagError]);
 
+
+    // loads the problem from database if problemId is provided
+    useEffect(function(){
+        if (!problemId) return;
+        setIsLoading(true);
+        fetch_problem(problemId)
+        .then(response => handleAPISuccess(response, false))
+        .catch(handleAPIError)
+        .finally(()=> setIsLoading(false));
+    }, [problemId, addToast, handleAPISuccess, handleAPIError]);
+    
     // handles the submit form 
     const onSaveProblem = (event) => {
         if (!event.isTrusted)   return;
@@ -86,14 +129,20 @@ export default function ProblemEditor(props){
         for (let i = 0; i < testCases.length; ++i)
             if (testCases[i].points < 1)    return flagError('Points must be at least 1 for test-case ' + (i + 1));
         // everything is valid for the problem
-        // now we go ahead and construct the problem
-
+        // now we go ahead and save the problem
+        setIsLoading(true);
+        save_problem(problemId, title, timeLimit, 
+            problemStatement, tags, testCases)
+        .then(response => handleAPISuccess(response, true))
+        .catch(handleAPIError)
+        .finally(()=> setIsLoading(false));
     };
 
+    // UI to be rendered
     return (
         <div id="problem-editor">
             <div className="header">
-                <h1>Create Problem</h1>
+                <h1>{problemId ? "Edit" : "Create"} Problem</h1>
                 <p>The act of creating/editing problems is restricted 
                     to the admins of 
                     <ExternalLink to="https://panchalprogrammingacademy.github.io/panchalprogrammingacademy"
@@ -106,93 +155,101 @@ export default function ProblemEditor(props){
                 </p>                
             </div>
 
+
+            {isLoading && <div className="loader"><Loader1 /></div>}
+            {!isLoading && <div className="problem-container">
             <div className="problem-meta-data">
-                <div className="input-group">
-                    <label htmlFor="title">Title</label>
-                    <input type="text" id='title' placeholder="Title"
-                        value={title} onChange={event => setTitle(event.target.value)} />
-                </div>
-                <div className="input-group">
-                    <label htmlFor="time-limit">Time limit (in milli-seconds)</label>
-                    <input type="number" min="0" max="60000" id='time-limit' placeholder="Time limit" 
-                        value={timeLimit} onChange={event => setTimeLimit(event.target.value)}/>
-                </div>
-            </div>
-            <div className="quill-editor-container">
-                <ReactQuill value={problemStatement} onChange={setProblemStatement}
-                    placeholder="Your problem statement here..." 
-                    modules={EditorModules}/>
-            </div>
-            <div className="tags-container">
-                <div className="input-group">
-                    <label htmlFor="tags">Tags</label>
-                    <div className="tags">
-                        {tags.map(tag => 
-                        (<div className="tag" key={tag}>
-                            {tag}
-                            <button onClick={event => {
-                                let oldTags = [...tags];
-                                let index = oldTags.indexOf(tag);
-                                if (index === -1)   return;
-                                oldTags.splice(index, 1);
-                                setTags(oldTags);
-                            }}><FontAwesomeIcon icon={faTimes}/></button>
-                        </div>))}
+                    <div className="input-group">
+                        <label htmlFor="title">Title</label>
+                        <input type="text" id='title' placeholder="Title"
+                            value={title} onChange={event => setTitle(event.target.value)} />
                     </div>
-                    <input type="text" onKeyDown={onAddTagHandler} 
-                        value={tagText} onChange={event => setTagText(event.target.value)}
-                        placeholder="Type a tag and hit enter"/>
-                </div>
-            </div>
-
-            <div className="test-cases-container">
-                {testCases.map((testCase, index) => (
-                    <div className="test-case" key={index}>
-                        <div className="header">
-                            Test Case {index + 1} 
-                            <button onClick={event => onDeleteTestCase(testCase, index)}>
-                                <FontAwesomeIcon icon={faTrash}/>
-                            </button>
-                        </div>
-                        <div className="public-test-case-input">
-                            <input type="checkbox" checked={testCase.publicTestCase}
-                                onChange={event => updateTestCase({...testCase, publicTestCase: !testCase.publicTestCase}, index)} /> Make this test case publicly visible
-                        </div>
-                        <div className="col-2">
-                            <div className="input-group">
-                                <label htmlFor={`input${index}`} >Input(Display formatting may not be same)</label>
-                                <textarea id={`input${index}`} value={testCase.input}
-                                    onChange={event => updateTestCase({...testCase, input: event.target.value}, index)}></textarea>
-                            </div>
-                            <div className="input-group">
-                                <label htmlFor={`output${index}`} >Output(Display formatting may not be same)</label>
-                                <textarea id={`output${index}`} value={testCase.output}
-                                    onChange={event => updateTestCase({...testCase, output: event.target.value}, index)}></textarea>
-                            </div>
-                        </div>
-                        <div className="col-2">
-                        <div className="input-group">
-                                <label htmlFor={`cmd${index}`} >Command line arguments (if any)</label>
-                                <input type="text" id={`cmd${index}`} value={testCase.cmd}
-                                    onChange={event => updateTestCase({...testCase, cmd: event.target.value}, index)} />
-                            </div>
-                            <div className="input-group">
-                                <label htmlFor={`points${index}`} >Points (integral score)</label>
-                                <input type="number" min="0" max="100" 
-                                    id={`points${index}`} value={testCase.points}
-                                    onChange={event => updateTestCase({...testCase, points: event.target.value}, index)} />
-                            </div>
-                        </div>
+                    <div className="input-group">
+                        <label htmlFor="time-limit">Time limit (in milli-seconds)</label>
+                        <input type="number" min="0" max="60000" id='time-limit' placeholder="Time limit" 
+                            value={timeLimit} onChange={event => setTimeLimit(event.target.value)}/>
                     </div>
-                ))}
-            </div>
+                </div>
+                <div className="quill-editor-container">
+                    <ReactQuill value={problemStatement} onChange={setProblemStatement}
+                        placeholder="Your problem statement here..." 
+                        modules={EditorModules}/>
+                </div>
+                <div className="tags-container">
+                    <div className="input-group">
+                        <label htmlFor="tags">Tags</label>
+                        <div className="tags">
+                            {tags.map(tag => 
+                            (<div className="tag" key={tag}>
+                                {tag}
+                                <button onClick={event => {
+                                    let oldTags = [...tags];
+                                    let index = oldTags.indexOf(tag);
+                                    if (index === -1)   return;
+                                    oldTags.splice(index, 1);
+                                    setTags(oldTags);
+                                }}><FontAwesomeIcon icon={faTimes}/></button>
+                            </div>))}
+                        </div>
+                        <input type="text" onKeyDown={onAddTagHandler} 
+                            value={tagText} onChange={event => setTagText(event.target.value)}
+                            placeholder="Type a tag and hit enter"/>
+                    </div>
+                </div>
 
-
-
-            <div className="sticky-footer">
-                <button className="info" onClick={onAddTestCaseHandler}><FontAwesomeIcon icon={faPlus} /></button>
-                <button className="success" onClick={onSaveProblem}><FontAwesomeIcon icon={faCalendarCheck} /></button>
-            </div>
+                <div className="test-cases-container">
+                    {testCases.map((testCase, index) => (
+                        <div className="test-case" key={index}>
+                            <div className="header">
+                                Test Case {index + 1} 
+                                <button onClick={event => onDeleteTestCase(testCase, index)}>
+                                    <FontAwesomeIcon icon={faTrash}/>
+                                </button>
+                            </div>
+                            <div className="public-test-case-input">
+                                <input type="checkbox" checked={testCase.publicTestCase}
+                                    onChange={event => updateTestCase({...testCase, publicTestCase: !testCase.publicTestCase}, index)} /> Make this test case publicly visible
+                            </div>
+                            <div className="col-2">
+                                <div className="input-group">
+                                    <label htmlFor={`input${index}`} >Input(Display formatting may not be same)</label>
+                                    <textarea id={`input${index}`} value={testCase.input}
+                                        onChange={event => updateTestCase({...testCase, input: event.target.value}, index)}></textarea>
+                                </div>
+                                <div className="input-group">
+                                    <label htmlFor={`output${index}`} >Output(Display formatting may not be same)</label>
+                                    <textarea id={`output${index}`} value={testCase.output}
+                                        onChange={event => updateTestCase({...testCase, output: event.target.value}, index)}></textarea>
+                                </div>
+                            </div>
+                            <div className="col-2">
+                            <div className="input-group">
+                                    <label htmlFor={`cmd${index}`} >Command line arguments (if any)</label>
+                                    <input type="text" id={`cmd${index}`} value={testCase.cmd}
+                                        onChange={event => updateTestCase({...testCase, cmd: event.target.value}, index)} />
+                                </div>
+                                <div className="input-group">
+                                    <label htmlFor={`points${index}`} >Points (integral score)</label>
+                                    <input type="number" min="0" max="100" 
+                                        id={`points${index}`} value={testCase.points}
+                                        onChange={event => updateTestCase({...testCase, points: event.target.value}, index)} />
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+                <div className="sticky-footer">
+                    {problemId && 
+                    <button className="secondary">
+                        <ExternalLink to={"/problem/" + problemId} 
+                            newWindow={true} className="browse-problem">
+                            <FontAwesomeIcon icon={faDirections}/>
+                        </ExternalLink>
+                    </button>}
+                    <button className="info" onClick={onAddTestCaseHandler}><FontAwesomeIcon icon={faPlus} /></button>
+                    <button className="success" onClick={onSaveProblem}><FontAwesomeIcon icon={faCalendarCheck} /></button>
+                </div>
+            </div>}
         </div>
     );
 };
