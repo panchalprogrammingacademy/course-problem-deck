@@ -2,6 +2,7 @@ import axios from 'axios';
 axios.defaults.baseURL = 'http://localhost:8080';
 // axios.defaults.baseURL = 'https://course-problem-deck-server.herokuapp.com';
 export const CLIENT_URL = 'http://localhost:3000'
+export const TOKEN_STRING = 'token';
 
 // logins the user with given credentials
 export const admin_login = (email, password) => {
@@ -11,10 +12,11 @@ export const admin_login = (email, password) => {
                 .catch(err => reject(err));
     });
 };
-// logouts the user 
-export const admin_logout = () => {
+// reads the problem with given id
+export const verify_and_fetch_problem = (problemId) => {
+    let token = localStorage.getItem(TOKEN_STRING);
     return new Promise(function(resolve, reject){
-        axios.post('/admin/logout')
+        axios.post('/admin/problem/', {problemId, token})
             .then(response => resolve(response))
                 .catch(err => reject(err));
     });
@@ -37,7 +39,8 @@ export const fetch_problem = (problemId) => {
 };
 // saves the problem
 export const save_problem = (problemId, title, timeLimit, problemStatement, tags, testCases) => {
-    let payload = {problemId, title, timeLimit, problemStatement, tags, testCases};
+    let token = localStorage.getItem(TOKEN_STRING);
+    let payload = {token, problemId, title, timeLimit, problemStatement, tags, testCases};
     return new Promise(function(resolve, reject){
         axios.post('/admin/problem/save', payload)
             .then(response => resolve(response))

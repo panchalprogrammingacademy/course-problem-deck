@@ -7,8 +7,8 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useToasts } from 'react-toast-notifications';
 import Loader1 from './Loader1';
-import {fetch_problem, save_problem, CLIENT_URL} from '../DataAccessObject/DataAccessObject';
-
+import {verify_and_fetch_problem, save_problem, CLIENT_URL} from '../DataAccessObject/DataAccessObject';
+import {Redirect} from 'react-router-dom';
 
 // configuration for quill-editor
 const EditorModules = {
@@ -39,6 +39,7 @@ export default function ProblemEditor(props){
     const [tags, setTags] = useState([]);
     const [tagText, setTagText] = useState('');
     const [testCases, setTestCases] = useState([]);
+    const [redirect, setRedirect] = useState(null);
     const { addToast } = useToasts();
 
 
@@ -112,9 +113,9 @@ export default function ProblemEditor(props){
     useEffect(function(){
         if (!problemId) return;
         setIsLoading(true);
-        fetch_problem(problemId)
+        verify_and_fetch_problem(problemId)
         .then(response => handleAPISuccess(response, false))
-        .catch(handleAPIError)
+        .catch(error => setRedirect(<Redirect to="/" />))
         .finally(()=> setIsLoading(false));
     }, [problemId, addToast, handleAPISuccess, handleAPIError]);
     
@@ -138,6 +139,7 @@ export default function ProblemEditor(props){
         .finally(()=> setIsLoading(false));
     };
 
+    if (redirect)   return redirect;
     // UI to be rendered
     return (
         <div id="problem-editor">

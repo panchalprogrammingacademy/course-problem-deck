@@ -2,33 +2,47 @@ import React, { useState } from 'react';
 import '../Styles/Login.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import {admin_login} from '../DataAccessObject/DataAccessObject';
+import {admin_login, TOKEN_STRING} from '../DataAccessObject/DataAccessObject';
 import Loader2 from './Loader2';
+import {Redirect} from 'react-router-dom';
+
+
 export default function Login(props){
+    // localStorage.removeItem(TOKEN_STRING);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [redirect, setRedirect] = useState(null);
+
+    // form handler
     const onSubmit = (event) => {
+        if (!event.isTrusted)   return;
         event.preventDefault();
         if (isLoading)  return;
         setIsLoading(true);
         admin_login(email, password).then(response => {
             let {data} = response;
-            if (data.error) setErrorMessage(data.error);
-            else setSuccessMessage('You are successfully logged in!');
-        }).catch(err => {
-            setErrorMessage(err);
+            let {token} = data;
+            localStorage.setItem(TOKEN_STRING, token);
+            setRedirect(<Redirect to="/" />);
+        }).catch(error => {
+            let {response} = error;
+            let {data} = response;
+            setErrorMessage(data.message);
+            setSuccessMessage('');
         }).finally(()=>{
             setIsLoading(false);
         });
     }; 
+
+    if (redirect)   return redirect;
     return (
         <div id="login">
             {errorMessage && 
             <div className="flash-message error">
-                <div>this is a busy day</div>
+                <div>{errorMessage}</div>
                 <div><button onClick={event => setErrorMessage('')}><FontAwesomeIcon icon={faTimes}/></button></div>
             </div>}
             {successMessage && 
