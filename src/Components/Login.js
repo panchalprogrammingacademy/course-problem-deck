@@ -32,12 +32,12 @@ export default function Login(props){
             let {data} = response;
             setErrorMessage(data.message);
             setSuccessMessage('');
-        }).finally(()=>{
             setIsLoading(false);
         });
     }; 
 
     if (redirect)   return redirect;
+    document.title = "Login | Course Problem Deck";
     return (
         <div id="login">
             {errorMessage && 

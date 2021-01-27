@@ -54,6 +54,7 @@ export default function LocalStorage(props){
     };
 
     // actual component to be rendered
+    document.title = "Local Storage | Course Problem Deck";
     return (
         <div id="course-page">
             <div className="header">

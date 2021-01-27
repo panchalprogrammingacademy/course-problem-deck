@@ -50,6 +50,7 @@ export default function CoursePage(props){
     }, [filters, problems]);
 
     // actual component to be rendered
+    document.title = courseId.toUpperCase().replaceAll("-", " ") + " | Course Problem Deck";
     return (
         <div id="course-page">
             <div className="header">

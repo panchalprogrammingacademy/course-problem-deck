@@ -3,7 +3,7 @@ import {HashLink as Link} from 'react-router-hash-link';
 import LostImage from '../Assets/404.gif';
 
 const pageNotFound = (props) => {
-    document.title = "Course Problem Deck | Page Not Found";
+    document.title = "Page Not Found | Course Problem Deck";
     return (
         <div id="pageNotfound"
             style={{

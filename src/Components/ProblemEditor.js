@@ -7,7 +7,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useToasts } from 'react-toast-notifications';
 import Loader1 from './Loader1';
-import {verify_and_fetch_problem, save_problem, CLIENT_URL} from '../DataAccessObject/DataAccessObject';
+import {verify_and_fetch_problem, save_problem, CLIENT_URL, delete_problem} from '../DataAccessObject/DataAccessObject';
 import {Redirect} from 'react-router-dom';
 
 // configuration for quill-editor
@@ -122,6 +122,7 @@ export default function ProblemEditor(props){
     // handles the submit form 
     const onSaveProblem = (event) => {
         if (!event.isTrusted)   return;
+        if (isLoading)  return;
         // validate problems properties
         if (title.trim() === '')    return flagError('Please provide a valid title');
         if (timeLimit < 1)          return flagError('Time limit has to be at least 1ms');
@@ -139,7 +140,25 @@ export default function ProblemEditor(props){
         .finally(()=> setIsLoading(false));
     };
 
+    // handles the problem delete request
+    const onDeleteProblem = (event => {
+        if (!event.isTrusted)   return;
+        if (isLoading)  return;
+        setIsLoading(true);
+        delete_problem(problemId).then(response => {
+            setRedirect(<Redirect to="/" />);
+        }).catch(error => {
+            console.log(error);
+            let {response} = error;
+            let {data} = response;
+            let {message} = data;
+            flagError(message);
+            setIsLoading(false);
+        });
+    });
+
     if (redirect)   return redirect;
+    document.title = (problemId ? "Edit" : "Add") + " Problem | Course Problem Deck";
     // UI to be rendered
     return (
         <div id="problem-editor">
@@ -248,8 +267,16 @@ export default function ProblemEditor(props){
                             <FontAwesomeIcon icon={faDirections}/>
                         </ExternalLink>
                     </button>}
-                    <button className="info" onClick={onAddTestCaseHandler}><FontAwesomeIcon icon={faPlus} /></button>
-                    <button className="success" onClick={onSaveProblem}><FontAwesomeIcon icon={faCalendarCheck} /></button>
+                    {problemId && 
+                    <button className="danger" onClick={onDeleteProblem}>
+                        <FontAwesomeIcon icon={faTrash}/>
+                    </button>}
+                    <button className="info" onClick={onAddTestCaseHandler}>
+                        <FontAwesomeIcon icon={faPlus} />
+                    </button>
+                    <button className="success" onClick={onSaveProblem}>
+                        <FontAwesomeIcon icon={faCalendarCheck} />
+                    </button>
                 </div>
             </div>}
         </div>

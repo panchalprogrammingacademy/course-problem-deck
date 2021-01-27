@@ -14,7 +14,7 @@ import {TOKEN_STRING} from './DataAccessObject/DataAccessObject';
 const PrivateRoute = ({component : Component, ...rest}) => {
 	return (<Route {...rest} render={props => {
 		let token = localStorage.getItem(TOKEN_STRING);
-		return (token ? <Component {...props} /> : <Route to="/" />)
+		return (token ? <Component {...props} /> : <Redirect to="/" />)
 	}} />);
 };
 

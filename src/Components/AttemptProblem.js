@@ -3,7 +3,6 @@ import '../Styles/AttemptProblem.scss';
 import Loader0 from './Loader0';
 import Loader2 from './Loader2';
 import Loader3 from './Loader3';
-import PageNotFound from './PageNotFound';
 import Modal from './Modal';
 import ScreenResizer from './ScreenResizer';
 import {fetch_problem, execute_code} from '../DataAccessObject/DataAccessObject';
@@ -13,11 +12,11 @@ import 'react-quill/dist/quill.snow.css';
 import CodeEditor from './CodeEditor';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUpload, faLock, faUnlockAlt, faPaw, faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
+import {Redirect} from 'react-router-dom';
 
 export default function AttemptProblem(props){
     let problemId = props.match.params.problemId;
     const [isLoading, setIsLoading] = useState(true);
-    const [notFound, setNotFound] = useState(null);
     const [problem, setProblem] = useState(null);
     const [print, setIsPrint] = useState(false);
     const [code, setCode] = useState('');
@@ -32,6 +31,7 @@ export default function AttemptProblem(props){
     const [maxScore, setMaxScore] = useState(0);
     const [score, setScore] = useState(0);
     const [showModal, setShowModal] = useState(false);
+    const [redirect, setRedirect] = useState(null);
 
 
 
@@ -40,12 +40,11 @@ export default function AttemptProblem(props){
         fetch_problem(problemId).then(response => {
             let {data} = response;
             if (data.error) {
-                addToast(data.error, {
-                    appearance: 'error',
-                });    
+                setRedirect(<Redirect to="/" />);
             } else if (!data.problem){
-                setNotFound(<PageNotFound />);
+                setRedirect(<Redirect to="/" />)
             } else {
+                setIsLoading(false);
                 setProblem(data.problem);
                 setMaxScore(data.problem.testCases.reduce((total, item) => total + item.points, 0))
                 let oldSolution = localStorage.getItem(data.problem._id);
@@ -58,11 +57,8 @@ export default function AttemptProblem(props){
                 }
             }
         }).catch(err => {
-            addToast(err.toString(), {appearance: 'error'});
-        }).finally(()=>{
-            setIsLoading(false);
+            setRedirect(<Redirect to="/" />);
         });
-
     }, [problemId, addToast]);
 
     // override the printing behavior
@@ -158,8 +154,8 @@ export default function AttemptProblem(props){
 
     // decide the component to be rendered
     if (isLoading) return <Loader0 />
-    if (notFound)   return notFound;
     if (!problem)   return <div>Failed to find that problem!</div>
+    if (redirect)   return redirect;
     document.title = problem.title + " | Course Problem Deck";
     return (
         <div id="attempt-problem">
