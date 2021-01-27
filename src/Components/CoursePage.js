@@ -40,8 +40,11 @@ export default function CoursePage(props){
         // stores the filtered problems
         setFilteredProblems(problems.filter(problem => {
             let tags = problem.tags;
-            for (let j = 0; j < filters.length; ++j)
+            let title = problem.title.toUpperCase();
+            for (let j = 0; j < filters.length; ++j){
+                if (title.indexOf(filters[j]) !== -1) return true;
                 if (tags.indexOf(filters[j]) === -1) return false;
+            }
             return true;
         }));
     }, [filters, problems]);
