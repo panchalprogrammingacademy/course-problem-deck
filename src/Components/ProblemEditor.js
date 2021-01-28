@@ -93,9 +93,10 @@ export default function ProblemEditor(props){
         setProblemStatement(problem.problemStatement);
         setTags(problem.tags);
         setTestCases(problem.testCases);
-        setProblemId(problem._id);        
+        setProblemId(problem._id);  
         // update the location to edit
-        window.location.href = CLIENT_URL + "/#/admin/problem/edit/" + problem._id;
+        let url = CLIENT_URL + "/#/admin/problem/edit/" + problem._id;
+        if (window.location.href !== url)   window.location.href = url;
         // display toast on success
         if (saved) addToast(`Your problem was successfully saved!`, {appearance: 'success', autoDismiss: false});
     }, [flagError, addToast]);
