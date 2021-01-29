@@ -85,16 +85,16 @@ export default function ProblemEditor(props){
     const flagError = useCallback((message) => addToast(message, {appearance: 'error', autoDismiss: false}), [addToast]);
     // update the properties of the problem
     const handleAPISuccess = useCallback((response, saved) => {
-        console.log('invoked success');
         let {data} = response;
         let {problem} = data;
         if (!problem)   flagError(`Server couldn't process your request`);
         // update all the properties of the problem
+        setProblemId(problem._id);  
         setTitle(problem.title);
         setTimeLimit(problem.timeLimit);
         setProblemStatement(problem.problemStatement);
         setTags(problem.tags);
-        setProblemId(problem._id);  
+        setTestCases(problem.testCases);
         // update the location to edit
         let url = CLIENT_URL + "/#/admin/problem/edit/" + problem._id;
         if (window.location.href !== url)   window.location.href = url;
