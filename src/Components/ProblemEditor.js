@@ -194,7 +194,7 @@ export default function ProblemEditor(props){
                     <div className="input-group">
                         <label htmlFor="time-limit">Time limit (in milli-seconds)</label>
                         <input type="number" min="0" max="60000" id='time-limit' placeholder="Time limit" 
-                            value={timeLimit} onChange={event => setTimeLimit(event.target.value)}/>
+                            value={timeLimit} onChange={event => setTimeLimit(parseInt(event.target.value || "0"))}/>
                     </div>
                 </div>
                 <div className="quill-editor-container">
@@ -259,7 +259,7 @@ export default function ProblemEditor(props){
                                     <label htmlFor={`points${index}`} >Points (integral score)</label>
                                     <input type="number" min="0" max="100" 
                                         id={`points${index}`} value={testCase.points}
-                                        onChange={event => updateTestCase({...testCase, points: parseInt(event.target.value)}, index)} />
+                                        onChange={event => updateTestCase({...testCase, points: parseInt(event.target.value || "0")}, index)} />
                                 </div>
                             </div>
                         </div>
