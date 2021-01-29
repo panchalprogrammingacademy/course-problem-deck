@@ -9,6 +9,7 @@ import { useToasts } from 'react-toast-notifications';
 import Loader1 from './Loader1';
 import {verify_and_fetch_problem, save_problem, CLIENT_URL, delete_problem, TOKEN_STRING} from '../DataAccessObject/DataAccessObject';
 import {Redirect} from 'react-router-dom';
+import Fotter from './Fotter';
 
 // configuration for quill-editor
 const EditorModules = {
@@ -163,7 +164,7 @@ export default function ProblemEditor(props){
     });
 
     if (redirect)   return redirect;
-    document.title = (problemId ? "Edit" : "Add") + " Problem | Course Problem Deck";
+    document.title = (problemId ? "Edit" : "Create") + " Problem | Course Problem Deck";
     // UI to be rendered
     return (
         <div id="problem-editor">
@@ -284,6 +285,8 @@ export default function ProblemEditor(props){
                     </button>
                 </div>
             </div>}
+
+            <Fotter />
         </div>
     );
 };

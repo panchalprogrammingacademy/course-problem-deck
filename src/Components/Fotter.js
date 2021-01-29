@@ -7,7 +7,7 @@ import ExternalLink from './ExternalLink';
 const fotter = (props) => {
     return (
         <div className="fotter">
-            Copyright &copy; 2020 <ExternalLink 
+            Copyright &copy; 2021 <ExternalLink 
                 to="https://panchalprogrammingacademy.github.io/panchalprogrammingacademy"
                 external={true} newWindow={true}>
                 Panchal Programming Academy
