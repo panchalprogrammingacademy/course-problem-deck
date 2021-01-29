@@ -8,13 +8,13 @@ const fotter = (props) => {
     return (
         <div className="fotter">
             Copyright &copy; 2020 <ExternalLink 
-                to="http://panchalprogrammingacademy.herokuapp.com"
+                to="https://panchalprogrammingacademy.github.io/panchalprogrammingacademy"
                 external={true} newWindow={true}>
                 Panchal Programming Academy
             </ExternalLink>
             <br/>
             Made with <span><FontAwesomeIcon icon={faHeart}/></span> by <ExternalLink 
-                to="http://shubhampanchal.herokuapp.com"
+                to="https://shubhampanchal.herokuapp.com"
                 external={true} newWindow={true}>
                 Shubham Panchal
             </ExternalLink>
