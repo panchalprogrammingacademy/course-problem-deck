@@ -57,7 +57,7 @@ export default function CoursePage(props){
                 <img src={AcademyIcon} alt="academyIcon" />
                 <h1>{courseId.replaceAll('-', ' ')}</h1>
             </div>
-            {isLoading && <Loader1 text="Please wait. I'm fetched problems from server!"/>}
+            {isLoading && <Loader1 text="Please wait. I'm fetching problems from server!"/>}
             {errorMessage && <div className="error-message">{errorMessage}</div>}
             {!isLoading && !errorMessage && 
             <div className="problems">

@@ -85,23 +85,23 @@ export default function ProblemEditor(props){
     const flagError = useCallback((message) => addToast(message, {appearance: 'error', autoDismiss: false}), [addToast]);
     // update the properties of the problem
     const handleAPISuccess = useCallback((response, saved) => {
+        console.log('invoked success');
         let {data} = response;
         let {problem} = data;
         if (!problem)   flagError(`Server couldn't process your request`);
-        // the problem was found successfully so close the loader
-        setIsLoading(false);
         // update all the properties of the problem
         setTitle(problem.title);
         setTimeLimit(problem.timeLimit);
         setProblemStatement(problem.problemStatement);
         setTags(problem.tags);
-        setTestCases(problem.testCases);
         setProblemId(problem._id);  
         // update the location to edit
         let url = CLIENT_URL + "/#/admin/problem/edit/" + problem._id;
         if (window.location.href !== url)   window.location.href = url;
         // display toast on success
         if (saved) addToast(`Your problem was successfully saved!`, {appearance: 'success', autoDismiss: false});
+        // the problem was found successfully so close the loader
+        setIsLoading(false);
     }, [flagError, addToast]);
     // handles the API error
     const handleAPIError = useCallback((error) => {
@@ -259,7 +259,7 @@ export default function ProblemEditor(props){
                                     <label htmlFor={`points${index}`} >Points (integral score)</label>
                                     <input type="number" min="0" max="100" 
                                         id={`points${index}`} value={testCase.points}
-                                        onChange={event => updateTestCase({...testCase, points: event.target.value}, index)} />
+                                        onChange={event => updateTestCase({...testCase, points: parseInt(event.target.value)}, index)} />
                                 </div>
                             </div>
                         </div>
