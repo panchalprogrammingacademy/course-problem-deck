@@ -7,7 +7,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useToasts } from 'react-toast-notifications';
 import Loader1 from './Loader1';
-import {verify_and_fetch_problem, save_problem, CLIENT_URL, delete_problem} from '../DataAccessObject/DataAccessObject';
+import {verify_and_fetch_problem, save_problem, CLIENT_URL, delete_problem, TOKEN_STRING} from '../DataAccessObject/DataAccessObject';
 import {Redirect} from 'react-router-dom';
 
 // configuration for quill-editor
@@ -86,7 +86,9 @@ export default function ProblemEditor(props){
     const handleAPISuccess = useCallback((response, saved) => {
         let {data} = response;
         let {problem} = data;
-        if (!problem)   return flagError(`Server couldn't find that problem!`);
+        if (!problem)   flagError(`Server couldn't process your request`);
+        // the problem was found successfully so close the loader
+        setIsLoading(false);
         // update all the properties of the problem
         setTitle(problem.title);
         setTimeLimit(problem.timeLimit);
@@ -107,6 +109,7 @@ export default function ProblemEditor(props){
         let {data} = response;
         let {message} = data;
         flagError(message);
+        setIsLoading(false);
     }, [flagError]);
 
 
@@ -116,8 +119,10 @@ export default function ProblemEditor(props){
         setIsLoading(true);
         verify_and_fetch_problem(problemId)
         .then(response => handleAPISuccess(response, false))
-        .catch(error => setRedirect(<Redirect to="/" />))
-        .finally(()=> setIsLoading(false));
+        .catch(() => {
+            localStorage.removeItem(TOKEN_STRING);
+            setRedirect(<Redirect to="/" />);
+        });
     }, [problemId, addToast, handleAPISuccess, handleAPIError]);
     
     // handles the submit form 
@@ -138,7 +143,6 @@ export default function ProblemEditor(props){
             problemStatement, tags, testCases)
         .then(response => handleAPISuccess(response, true))
         .catch(handleAPIError)
-        .finally(()=> setIsLoading(false));
     };
 
     // handles the problem delete request

@@ -2,12 +2,12 @@ import axios from 'axios';
 export const TOKEN_STRING = 'token';
 
 // // for local-development
-// axios.defaults.baseURL = 'https://course-problem-deck-server.herokuapp.com';
-// export const CLIENT_URL = 'http://localhost:3000'
+axios.defaults.baseURL = 'http://localhost:8080';
+export const CLIENT_URL = 'http://localhost:3000'
 
 // // for production
-axios.defaults.baseURL = 'https://course-problem-deck-server.herokuapp.com';
-export const CLIENT_URL = 'http://panchalprogrammingacademy.github.io/course-problem-deck';
+// axios.defaults.baseURL = 'https://course-problem-deck-server.herokuapp.com';
+// export const CLIENT_URL = window.location.origin + '/course-problem-deck';
 
 // logins the user with given credentials
 export const admin_login = (email, password) => {
