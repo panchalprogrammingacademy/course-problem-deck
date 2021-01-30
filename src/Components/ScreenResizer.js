@@ -52,5 +52,8 @@ export default function ScreenResizer(props) {
     };
 
     // return the component
-    return (<div className="resizer" id="resizer" onMouseDown={mouseDownHandler}></div>);
+    return (
+        <div className="resizer" id="resizer" 
+            onMouseDown={mouseDownHandler}>
+        </div>);
 };

@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Ubuntu+Mono&display=swap');
 #attempt-problem{
     user-select: none;
     -webkit-user-select: none;
@@ -11,7 +12,7 @@
         overflow: scroll;
     }
     .resizer{
-        width: 5px !important;
+        // width: 5px !important;
         cursor: ew-resize;
         border: 2px solid transparent;
         overflow: hidden !important;    
@@ -161,7 +162,7 @@
                 font-size: 18px;
                 padding: 0px 10px 10px 10px;
                 textarea{
-                    font-family: 'Libre Baskerville', serif; 
+                    font-family: 'Ubuntu Mono', monospace !important;
                     font-size: 15px;    
                     width: 100%;
                     background: whitesmoke;

@@ -62,8 +62,21 @@ export default function AttemptProblem(props){
     }, [problemId, addToast]);
 
     // override the printing behavior
-    window.onbeforeprint = () => setIsPrint(true);
-    window.onafterprint = () => setIsPrint(false);
+    window.onbeforeprint = () => {
+        let style = `height: auto; overflow: auto;`;
+        let attempt_problem_div = document.getElementById('attempt-problem');
+        attempt_problem_div.setAttribute('style', style);
+        let left_div = document.getElementById('left');
+        left_div.setAttribute(`style`, style);
+        setIsPrint(true);
+    }
+    window.onafterprint = () => {
+        let attempt_problem_div = document.getElementById('attempt-problem');
+        attempt_problem_div.setAttribute('style', `height: 100vh; overflow: hidden;`);
+        let left_div = document.getElementById('left');
+        left_div.setAttribute(`style`, `height: 100vh; overflow: scroll;`);
+        setIsPrint(false);
+    }
 
     // upload code functionality
     const uploadCode = () => {
