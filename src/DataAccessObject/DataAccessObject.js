@@ -3,7 +3,7 @@ export const TOKEN_STRING = 'token';
 
 // // for local-development
 // axios.defaults.baseURL = 'http://localhost:8080';
-// export const CLIENT_URL = 'http://localhost:3000'
+// export const CLIENT_URL = 'http://localhost:3000';
 
 // // for production
 axios.defaults.baseURL = 'https://course-problem-deck-server.herokuapp.com';

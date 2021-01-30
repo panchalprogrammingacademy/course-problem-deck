@@ -11,7 +11,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import CodeEditor from './CodeEditor';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUpload, faLock, faUnlockAlt, faPaw, faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
+import { faLock, faUnlockAlt, faPaw, faCheck, faTimes, faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import {Redirect} from 'react-router-dom';
 
 export default function AttemptProblem(props){
@@ -203,7 +203,7 @@ export default function AttemptProblem(props){
                     language={language} setLanguage={setLanguage}/>
                 <div className="code-operations">
                     <button onClick={uploadCode}>
-                        <FontAwesomeIcon icon={faUpload}/> Upload code
+                        <FontAwesomeIcon icon={faArrowUp}/> Upload code
                     </button>
                     <input type="checkbox" checked={customTest}
                         onChange={event => setCustomTest(!customTest)} /> 
