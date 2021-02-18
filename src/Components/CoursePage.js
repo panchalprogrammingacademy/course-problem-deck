@@ -7,6 +7,7 @@ import {course_problems} from '../DataAccessObject/DataAccessObject';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 import ExternalLink from './ExternalLink';
+import {isProblemSolved} from '../DataAccessObject/utility';
 
 export default function CoursePage(props){
     const courseId = props.courseId;
@@ -93,7 +94,7 @@ export default function CoursePage(props){
                 {filteredProblems.map(problem => {
                     return (
                         <div className="problem" key={problem._id}>
-                            {localStorage.getItem(problem._id) && <span><FontAwesomeIcon icon={faCheck} /></span>}
+                            {isProblemSolved(problem._id) && <span><FontAwesomeIcon icon={faCheck} /></span>}
                             <ExternalLink to={"/problem/" + problem._id} 
                                 newWindow={true} className="problem-title">
                                 {problem.title}

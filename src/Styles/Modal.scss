@@ -21,6 +21,11 @@
             align-items: center;
             justify-content: space-between;
             border-bottom: 1px solid gainsboro;
+            .header{
+                width: 100%;
+                text-align: center;
+                font-weight: bold;
+            }
             svg{
                 cursor: pointer;
             }

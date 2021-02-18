@@ -13,6 +13,8 @@ import CodeEditor from './CodeEditor';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLock, faUnlockAlt, faPaw, faCheck, faTimes, faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import {Redirect} from 'react-router-dom';
+import {saveToLocalStorage, readFromLocalStorage} from '../DataAccessObject/utility';
+
 
 export default function AttemptProblem(props){
     let problemId = props.match.params.problemId;
@@ -30,8 +32,8 @@ export default function AttemptProblem(props){
     const { addToast } = useToasts();
     const [maxScore, setMaxScore] = useState(0);
     const [score, setScore] = useState(0);
-    const [showModal, setShowModal] = useState(false);
     const [redirect, setRedirect] = useState(null);
+    const [showModal, setShowModal] = useState(false);
 
 
 
@@ -47,16 +49,18 @@ export default function AttemptProblem(props){
                 setIsLoading(false);
                 setProblem(data.problem);
                 setMaxScore(data.problem.testCases.reduce((total, item) => total + item.points, 0))
-                let oldSolution = localStorage.getItem(data.problem._id);
-                if (oldSolution) {
-                    let jsonObject = JSON.parse(oldSolution);
+                let jsonObject = readFromLocalStorage(data.problem._id);
+                if (jsonObject) {
                     setLanguage(jsonObject.language);
                     setCode(jsonObject.code);
                     let date = new Date(jsonObject.timestamp);
-                    addToast('You solved this problem on ' + date.toLocaleString("en-US", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }), {appearance: 'info'});
+                    if (jsonObject.solved) {
+                        addToast('You solved this problem on ' + date.toLocaleString("en-US", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }), {appearance: 'info'});
+                    }
                 }
             }
         }).catch(err => {
+            console.log(err);
             setRedirect(<Redirect to="/" />);
         });
     }, [problemId, addToast]);
@@ -77,6 +81,7 @@ export default function AttemptProblem(props){
         left_div.setAttribute(`style`, `height: 100vh; overflow: scroll;`);
         setIsPrint(false);
     }
+
 
     // upload code functionality
     const uploadCode = () => {
@@ -103,6 +108,7 @@ export default function AttemptProblem(props){
         if (!event.isTrusted)   return;
         if (disabled)   return;
         setDisabled(true);
+        saveToLocalStorage(problem._id, problem.title, code, language);
         if (customTest) {
             execute_code(code, language, problem.timeLimit, customInput, customCMD)
             .then(response => {
@@ -146,23 +152,17 @@ export default function AttemptProblem(props){
                 }).finally(()=>{
                     let newScore = problem.testCases.reduce((total, item) => total + item.executionScore, 0);
                     setScore(newScore);
-                    if (newScore === maxScore)  setShowModal(true);
+                    if (newScore === maxScore) {
+                        // save the problem to local-storage with success
+                        saveToLocalStorage(problem._id, problem.title, code, language, true);
+                        // display the modal to user
+                        setShowModal(true);
+                    }
                     let result = problem.testCases.reduce((result, item) => result || item.loading, false);
                     if (!result) setDisabled(false);
                 });    
             }
         }
-    };
-
-
-    const onClose = ()=> setShowModal(false);
-    const onSave = ()=> {
-        // get solution information
-        let contentToSave = {title: problem.title, code,language,timestamp: new Date()};
-        // store the item in local-storage
-        localStorage.setItem(problem._id, JSON.stringify(contentToSave));
-        // hide the modal
-        setShowModal(false);
     };
 
     // decide the component to be rendered
@@ -172,7 +172,7 @@ export default function AttemptProblem(props){
     document.title = problem.title + " | Course Problem Deck";
     return (
         <div id="attempt-problem">
-            {showModal && <Modal onClose={onClose} onSave={onSave} />}
+            {showModal && <Modal onClose={() => setShowModal(false)} />}
             <div className={`left ${print ? 'full-flex' : ''}`} id="left">
                 {print && <a href="/">{window.location.href}</a>}
                 <div className="problem-header">

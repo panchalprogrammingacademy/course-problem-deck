@@ -7,7 +7,7 @@ For any query you can contact `panchalprogrammingacademy@gmail.com` or `shubhamp
 - This portal does not require any registration and is open to use for students.  
 - The server is hosted on a heroku-free-dynamo which provides a limit on the amount of time for which you can access the portal within a month.  
 - Your solutions are not stored on server and therefore it's your responsibility to maintain a list of problems you have done and the problems which are yet to be done!  
-- On a successful submission you will get a prompt where you can choose whether or not you wish to save your solution to your browser's local storage.  
+- Your solution is saved to your browser's local storage when you make a submission. This is done for user-friendly environment!    
 - You can grab the list of solutions saved on your browser's local-storage using [https://panchalprogrammingacademy.github.io/course-problem-deck/#/localStorage](https://panchalprogrammingacademy.github.io/course-problem-deck/#/localStorage)  
 - You can grab all the problems for `The Complete C Course` via [https://panchalprogrammingacademy.github.io/course-problem-deck/#/course/the-complete-c-course/](https://panchalprogrammingacademy.github.io/course-problem-deck/#/course/the-complete-c-course/)  
 - If your submission ends up with an error saying `command failed ....`, you can try to re-submitting your solution and see if that works for you! This is a server-side bug!

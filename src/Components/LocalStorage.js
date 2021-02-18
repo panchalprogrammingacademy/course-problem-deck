@@ -3,7 +3,7 @@ import '../Styles/CoursePage.scss';
 import AcademyIcon from '../Assets/ppa.png';
 import Fotter from './Fotter';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashAlt, faFileDownload } from '@fortawesome/free-solid-svg-icons';
+import { faTrashAlt, faFileDownload, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { useToasts } from 'react-toast-notifications';
 import ExternalLink from './ExternalLink';
 
@@ -60,7 +60,7 @@ export default function LocalStorage(props){
             <div className="header">
                 <img src={AcademyIcon} alt="academyIcon" />
                 <h1>Solutions saved to local storage</h1>
-                <span>With your permission the following solutions are stored in your browser's local storage by course-problem-deck!</span>
+                {/* <span>With your permission the following solutions are stored in your browser's local storage by course-problem-deck!</span> */}
             </div>
             <div className="problems">
                 {function(){
@@ -75,6 +75,7 @@ export default function LocalStorage(props){
                                 <span onClick={event => downloadItem(id)}>
                                     <FontAwesomeIcon style={{color: "black", cursor: "pointer"}} icon={faFileDownload} />
                                 </span>
+                                {solution.solved && <span><FontAwesomeIcon icon={faCheck} /></span>}
                                 <ExternalLink to={"/problem/" + id} 
                                     className="problem-title" newWindow={true}>
                                     {solution.title}

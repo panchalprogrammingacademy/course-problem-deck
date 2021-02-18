@@ -88,11 +88,14 @@ export default function ProblemEditor(props){
         let {data} = response;
         let {problem} = data;
         if (!problem)   flagError(`Server couldn't process your request`);
+        console.log(problem);
         // update all the properties of the problem
         setProblemId(problem._id);  
         setTitle(problem.title);
         setTimeLimit(problem.timeLimit);
-        setProblemStatement(problem.problemStatement);
+        let statement = String(problem.problemStatement);
+        let problemHTML = statement.replaceAll(/(<p><br><\/p>)+/g, `<p><br></p>`);
+        setProblemStatement(problemHTML);
         setTags(problem.tags);
         setTestCases(problem.testCases);
         // update the location to edit
@@ -120,7 +123,8 @@ export default function ProblemEditor(props){
         setIsLoading(true);
         verify_and_fetch_problem(problemId)
         .then(response => handleAPISuccess(response, false))
-        .catch(() => {
+        .catch((error) => {
+            console.log(error);
             localStorage.removeItem(TOKEN_STRING);
             setRedirect(<Redirect to="/" />);
         });
