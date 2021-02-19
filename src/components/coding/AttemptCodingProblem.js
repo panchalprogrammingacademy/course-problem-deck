@@ -61,6 +61,8 @@ export default function AttemptCodingProblem(props){
             }
         }).catch(err => {
             console.log(err);
+            if (err.response && err.response.data) 
+                addToast(err.response.data.message, {appearance: `info`, autoDismiss: true});
             setRedirect(<Redirect to="/" />);
         });
     }, [problemId, addToast]);
@@ -166,9 +168,9 @@ export default function AttemptCodingProblem(props){
     };
 
     // decide the component to be rendered
-    if (isLoading) return <Loader0 />
-    if (!problem)   return <div>Failed to find that problem!</div>
     if (redirect)   return redirect;
+    if (isLoading)  return <Loader0 />
+    if (!problem)   return <div>Failed to find that problem!</div>
     document.title = problem.title + " | Course Problem Deck";
     return (
         <div id="attempt-problem">

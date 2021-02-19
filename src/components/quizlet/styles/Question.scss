@@ -1,46 +1,104 @@
 .problem{
-    .quill{
-        margin: 10px;
-        font-family: 'Libre Baskerville', serif !important;
-    }
-    .ql-toolbar{
-        font-family: 'Libre Baskerville', serif !important;
-    }
-    .ql-editor{
-        min-height: 250px;
-        font-family: 'Libre Baskerville', serif !important;
-    }
-    .ql-tooltip{
-        left: 0px !important;
-        font-family: 'Libre Baskerville', serif !important;
-        input{
-            font-family: 'Libre Baskerville', serif !important;
-        }
-    }
-    pre.ql-syntax{
-        color: black !important;
-        background-color: white !important;
-        border: 1px solid darkgray;
-    }  
-    .input-group{
-        label{
-            text-align: left;
-        }
-        select{
-            width: 100%;
-            padding: 10px;
-            font-family: 'Libre Baskerville', serif !important;
-            background-color: white;
-            border: 1px solid #ced4da;
-            border-radius: 5px;
-        }            
-    }
-
-    .col-2{
+    box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.3), 0 4px 8px 3px rgba(60, 64, 67, 0.15);            
+    margin: 10px;
+    margin-top: 20px;
+    .problem-header{
         display: flex;
-        div:nth-child(1){
-            margin-left: 0px;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 18px;
+        padding: 10px;
+        flex-wrap: wrap;
+        background-color: #ededed;
+        span{
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+        .problem-header-options{
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+            .input-group{
+                display: flex;
+                select, input{
+                    padding: 10px;
+                    font-family: 'Libre Baskerville', serif !important;
+                    font-size: 18px;
+                    background-color: white;
+                    border: 1px solid #ced4da;
+                    border-radius: 5px;
+                }  
+                input{
+                    width: 100px;
+                    margin-right: 10px;
+                }   
+            }
+            button{
+                background: #dc3545;
+                color: white;
+                font-size: 20px;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                cursor: pointer;
+                margin: 0px 10px;
+            }
+            button:disabled{
+                cursor: not-allowed;
+                opacity: 0.1;
+            }
+            .up-button{
+                background-color: #17a2b8;
+            }
+            .down-button{
+                background-color: #198754;
+            }
         }
     }
 
+    .editors{
+        display: flex;
+        > div{
+            width: 50%;
+            .label{
+                margin: 10px;
+            }
+        }
+    }
+
+    .answer{
+        margin: 10px;
+        width: -webkit-fill-available;
+        padding: 5px;
+        padding-left: 0px;
+        font-family: 'Libre Baskerville', serif !important;
+        font-size: 18px;
+        border-bottom: 1px solid gray;
+    }
+
+    .options{
+        padding: 10px;
+        .option-input-group{
+            display: flex;
+            align-items: center;
+            margin: 10px auto;
+            textarea{
+                border-bottom: 1px solid black;
+                flex: 1;
+                margin: 0px 10px;
+                // resize: none;
+                font-family: 'Ubuntu Mono', monospace !important;
+                font-size: 18px;    
+                height: 30px;
+                padding: 5px;
+            }
+            .add-option-textarea{
+                opacity: 0.5;
+                resize: none;
+                // background-color: #ededed;
+            }
+            
+        }
+    }
 }

@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Ubuntu+Mono&display=swap');
-#problem-editor{
+#quiz-editor{
     font-family: 'Libre Baskerville', serif !important;
     .loader{
         .lds-facebook div {
@@ -18,121 +18,127 @@
         }
     }
 
-    .input-group{
-        // display: grid;
-        margin: 10px;
-        width: 100%;
-        label{
-            font-size: 18px;
-            margin: 10px 0px;
-            display: block;
-        }
-        input, textarea{
-            border: 1px solid #ced4da;
-            border-radius: 5px;
-            font-size: 18px;
-            padding: 10px;
-            font-family: 'Libre Baskerville', serif !important;
-            width: -webkit-fill-available;
-        }
-        textarea{
-            height: 100px;
-            resize: none;
-            font-family: 'Ubuntu Mono', monospace !important;
-        }
-    }
-
-    .problem-meta-data{
-        display: flex;
-        align-items: center;
-        justify-content: space-evenly;
-    }
-
-    .problems{
-        .problem-container{
-            border: 1px solid black;
-            margin: 10px;
-        }
-    }
-
-    .tags-container{
-        > div{
-            width: auto;
-        }
-        .tags{
-            .tag{
-                display: inline-block;
-                background-color: whitesmoke;
-                padding: 5px; margin-right: 5px; 
-                margin-bottom: 5px;
-                border-radius: 10px;
-                font-family: 'Libre Baskerville', serif;
-                button{
-                    cursor: pointer; 
-                    color: black !important;
-                    background: transparent;
-                    border: none;
-                    outline-width: 0px;
+    .problem-container{
+        .problem-meta-data{
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+            .input-group{
+                margin: 10px;
+                width: 100%;
+                label{
+                    font-size: 18px;
+                    margin: 10px 0px;
+                    display: block;
+                }
+                input, textarea{
+                    border: 1px solid #ced4da;
+                    border-radius: 5px;
+                    font-size: 18px;
+                    padding: 10px;
+                    font-family: 'Libre Baskerville', serif !important;
+                    width: -webkit-fill-available;
+                }
+                textarea{
+                    height: 100px;
+                    resize: none;
+                    font-family: 'Ubuntu Mono', monospace !important;
                 }
             }
         }
-    }
 
-    .problems{
-        .problem-container{
-            .problem-header{
-                display: flex;
-                align-items: center;
-                font-size: 18px;
-                padding: 10px;
-                button{
-                    background: #dc3545;
-                    color: white;
-                    font-size: 20px;
-                    width: 40px;
-                    height: 40px;
-                    border-radius: 50%;
-                    cursor: pointer;
-                    margin: 0px 10px;
+        .tags-container{
+            > div{
+                width: auto;
+            }
+            .tags{
+                margin: 10px 0px;
+                .tag{
+                    display: inline-block;
+                    background-color: whitesmoke;
+                    padding: 5px; margin-right: 5px; 
+                    margin-bottom: 5px;
+                    border-radius: 10px;
+                    font-family: 'Libre Baskerville', serif;
+                    button{
+                        cursor: pointer; 
+                        color: black !important;
+                        background: transparent;
+                        border: none;
+                        outline-width: 0px;
+                    }
+                }
+            }
+            .input-group{
+                margin: 10px;
+                input{
+                    border: 1px solid #ced4da;
+                    border-radius: 5px;
+                    font-size: 18px;
+                    padding: 10px;
+                    font-family: 'Libre Baskerville', serif !important;
+                    width: 100%;
                 }
             }
         }
-        .nothing-here{
-            text-align: center;
-            margin-bottom: 50px;
-        }
-    }
 
-    .sticky-footer{
-        text-align: right;
-        position: fixed;
-        bottom: 0px;
-        right: 0px;
-        z-index: 2;
-        button{
-            font-size: 30px;
-            border-radius: 50%;
-            height: 50px;
-            width: 50px;
-            margin: 10px;
-            cursor: pointer;
-            color: white;
-            background: transparent;
-            a{
-                color: white !important;
+
+        .problems{
+            margin-top: 20px;
+            .problem-container{            
+                .problem-header{
+                    display: flex;
+                    align-items: center;
+                    font-size: 18px;
+                    padding: 10px;
+                    button{
+                        background: #dc3545;
+                        color: white;
+                        font-size: 20px;
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 50%;
+                        cursor: pointer;
+                        margin: 0px 10px;
+                    }
+                }
+            }
+            .nothing-here{
+                text-align: center;
+                margin-bottom: 50px;
             }
         }
-        .success{
-            background: #505250;
-        }
-        .info{
-            background: #17a2b8;
-        }
-        .secondary{
-            background: #04414d;
-        }
-        .danger{
-            background: red;
+        .sticky-footer{
+            text-align: right;
+            position: fixed;
+            bottom: 0px;
+            right: 0px;
+            z-index: 2;
+            button{
+                font-size: 30px;
+                border-radius: 50%;
+                height: 50px;
+                width: 50px;
+                margin: 10px;
+                cursor: pointer;
+                color: white;
+                background: transparent;
+                a{
+                    color: white !important;
+                }
+            }
+            .success{
+                background: #505250;
+            }
+            .info{
+                background: #17a2b8;
+            }
+            .secondary{
+                background: #04414d;
+            }
+            .danger{
+                background: red;
+            }
         }
     }
     .fotter{

@@ -6,7 +6,7 @@ import './styles/ToastedNotes.scss';
 // stores the ref to the returned component
 let elementRef = null;
 // default time out
-const DEFAULT_TIME_OUT = 2000;
+const DEFAULT_TIME_OUT = 5000;
 // faInfoCircle
 class ToastedNotesContainer extends React.Component{
     // states for the toasts

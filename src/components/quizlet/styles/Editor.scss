@@ -1,0 +1,25 @@
+.quizlet_editor{
+    .quill{
+        margin: 10px;
+        font-family: 'Libre Baskerville', serif !important;
+    }
+    .ql-toolbar{
+        font-family: 'Libre Baskerville', serif !important;
+    }
+    .ql-editor{
+        min-height: 250px;
+        font-family: 'Libre Baskerville', serif !important;
+    }
+    .ql-tooltip{
+        left: 0px !important;
+        font-family: 'Libre Baskerville', serif !important;
+        input{
+            font-family: 'Libre Baskerville', serif !important;
+        }
+    }
+    pre.ql-syntax{
+        color: black !important;
+        background-color: white !important;
+        border: 1px solid darkgray;
+    }  
+}

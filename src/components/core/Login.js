@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import './styles/Login.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import {admin_login, TOKEN_STRING} from '../../helpers/DataAccessObject';
+import {admin_login} from '../../helpers/DataAccessObject';
+import {TOKEN_STRING} from '../../helpers/CONSTANTS';
 import Loader2 from '../utility/Loader2';
 import {Redirect} from 'react-router-dom';
 
