@@ -1,0 +1,84 @@
+#course-page{
+    padding: 20px;
+    padding-bottom: 0px;
+    background: url('../../../assets/background.jpg') no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    min-height: 100vh;
+    font-family: 'Libre Baskerville', serif; 
+
+    .header{
+        text-align: center;
+        color: white;
+        h1{
+            margin-bottom: 0px;
+            text-transform: uppercase;
+        }
+    }
+
+    .problems{
+        .problem{
+            background-color: white;
+            padding: 10px;
+            margin: 10px;
+            opacity: 0.8;
+            span{
+                color: #155724 !important;
+                font-size: 20px;
+                margin-right: 10px;
+            }
+        }
+        .problem:hover{
+            background-color: honeydew;
+        }
+        .problem-title{
+            color: black;
+            cursor: pointer;
+            text-decoration: none !important;
+            font-size: 20px;
+        }
+        .problem-title:hover{
+            color: #1BA94C;
+        }    
+        
+        .filter-box{
+            background-color: white;
+            padding: 10px;
+            margin: 10px;
+            opacity: 0.8;
+        }
+        .filter-input{
+            font-size: 20px;
+            width: 100%;
+            font-family: 'Libre Baskerville', serif; 
+        }
+        .filter-item {
+            margin-right: 10px;
+            margin-bottom: 10px;
+            border: 1px solid black;
+            border-radius: 10px;
+            padding: 5px;
+            display: inline-block;
+        }
+        .filter-item > button{
+            background-color: transparent;
+            cursor: pointer;
+        }        
+    }
+
+    .error-message{
+        font-size: 20px;
+        text-align: center;
+        color: #f8d7da;
+        margin: 50px;
+        padding: 10px;
+    }
+    .empty-message{
+        font-size: 20px;
+        color: white;
+        text-align: center;
+        margin: 50px auto;
+    }
+}

@@ -1,5 +1,5 @@
 import React from 'react';
-import '../Styles/Loader3.scss';
+import './styles/Loader3.scss';
 export default function Loader3(props){
     return (
         <div id="loader3">

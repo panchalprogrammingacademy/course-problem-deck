@@ -1,5 +1,5 @@
 import React from 'react';
-import '../Styles/Loader0.scss';
+import './styles/Loader0.scss';
 import Fotter from './Fotter';
 export default function Loader0(props){
     return (

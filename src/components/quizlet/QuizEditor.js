@@ -3,30 +3,14 @@ import '../Styles/ProblemEditor.scss';
 import ExternalLink from './ExternalLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faCalendarCheck, faTimes, faTrash, faDirections } from '@fortawesome/free-solid-svg-icons';
-import ReactQuill from 'react-quill';
-import 'react-quill/dist/quill.snow.css';
 import { useToasts } from 'react-toast-notifications';
+import Problem from './Problem';
 import Loader1 from './Loader1';
+import { v4 as uuidv4 } from 'uuid';
+import NothingHereImage from '../Assets/nothing.webp';
 import {verify_and_fetch_problem, save_problem, CLIENT_URL, delete_problem, TOKEN_STRING} from '../DataAccessObject/DataAccessObject';
 import {Redirect} from 'react-router-dom';
 import Fotter from './Fotter';
-
-// configuration for quill-editor
-const EditorModules = {
-    formula: true, 
-    syntax: true,
-    toolbar: [
-        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-        ['bold', 'italic', 'underline', 'strike'],
-        [{ 'color': [] }, { 'background': [] }],  
-        ['code-block', 'formula', 'blockquote', 'image'],
-        [{ 'script': 'sub'}, { 'script': 'super' }],
-        [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'align': []}],
-        [{ 'indent': '-1'}, { 'indent': '+1' }],       
-        ['clean']
-    ]
-};
-
 
 // functional component
 export default function ProblemEditor(props){
@@ -35,13 +19,17 @@ export default function ProblemEditor(props){
     const [problemId, setProblemId] = useState(params.problemId);
     const [isLoading, setIsLoading] = useState(false);
     const [title, setTitle] = useState('');
-    const [timeLimit, setTimeLimit] = useState(1000);
+    const [timeLimit, setTimeLimit] = useState(0);
     const [problemStatement, setProblemStatement] = useState('');
     const [tags, setTags] = useState([]);
     const [tagText, setTagText] = useState('');
     const [testCases, setTestCases] = useState([]);
     const [redirect, setRedirect] = useState(null);
     const { addToast } = useToasts();
+
+
+    // stores all the problems
+    const [problems, setProblems] = useState([]);
 
 
     // event handler for add tag
@@ -55,16 +43,18 @@ export default function ProblemEditor(props){
         }
     };
 
-    // event handler for add test-case
+    // event handler for addding new-problem
     const onAddTestCaseHandler = (event) => {
-        let testCase = {
-            publicTestCase: false,
-            input: '',
-            output: '',
-            cmd: '',
-            points: 5,
-        };
-        setTestCases([...testCases, testCase]);
+        let oldProblems = [...problems];
+        oldProblems.push(uuidv4());
+        setProblems(oldProblems);
+    };
+    // deletes the problem
+    const deleteProblemHandler = (index) => {
+        console.log('delete at index ', index);
+        let oldProblems = [...problems];
+        oldProblems.splice(index, 1);
+        setProblems(oldProblems);
     };
 
     // updates the test case
@@ -74,12 +64,6 @@ export default function ProblemEditor(props){
         setTestCases(oldTestCases);
     };
 
-    // deletes the test case
-    const onDeleteTestCase = (testCase, index) => {
-        let oldTestCases = [...testCases];
-        oldTestCases.splice(index, 1);
-        setTestCases(oldTestCases);
-    };
 
     // displays the toast with error message
     const flagError = useCallback((message) => addToast(message, {appearance: 'error', autoDismiss: false}), [addToast]);
@@ -168,13 +152,13 @@ export default function ProblemEditor(props){
     });
 
     if (redirect)   return redirect;
-    document.title = (problemId ? "Edit" : "Create") + " Problem | Course Problem Deck";
+    document.title = (problemId ? "Edit" : "Create") + " Quiz | Quizlet";
     // UI to be rendered
     return (
         <div id="problem-editor">
             <div className="header">
-                <h1>{problemId ? "Edit" : "Create"} Problem</h1>
-                <p>The act of creating/editing problems is restricted 
+                <h1>{problemId ? "Edit" : "Create"} Quiz</h1>
+                <p>The act of creating/editing quizzes is restricted 
                     to the admins of 
                     <ExternalLink to="https://panchalprogrammingacademy.github.io/panchalprogrammingacademy"
                         external={true} newWindow={true} className="link">
@@ -188,24 +172,25 @@ export default function ProblemEditor(props){
 
 
             {isLoading && <div className="loader"><Loader1 /></div>}
-            {!isLoading && <div className="problem-container">
-            <div className="problem-meta-data">
+            {!isLoading && 
+            <div className="problem-container">
+                <div className="problem-meta-data">
                     <div className="input-group">
                         <label htmlFor="title">Title</label>
                         <input type="text" id='title' placeholder="Title"
                             value={title} onChange={event => setTitle(event.target.value)} />
                     </div>
                     <div className="input-group">
-                        <label htmlFor="time-limit">Time limit (in milli-seconds)</label>
-                        <input type="number" min="0" max="60000" id='time-limit' placeholder="Time limit" 
-                            value={timeLimit} onChange={event => setTimeLimit(parseInt(event.target.value || "0"))}/>
+                        <label htmlFor="time-limit">Time limit (in minutes)</label>
+                        <input type="number" min="0" max="120" id='time-limit' placeholder="Time limit" 
+                            value={timeLimit} onChange={event => setTimeLimit(event.target.value)}/>
                     </div>
                 </div>
-                <div className="quill-editor-container">
+                {/* <div className="quill-editor-container">
                     <ReactQuill value={problemStatement} onChange={setProblemStatement}
                         placeholder="Your problem statement here..." 
                         modules={EditorModules}/>
-                </div>
+                </div> */}
                 <div className="tags-container">
                     <div className="input-group">
                         <label htmlFor="tags">Tags</label>
@@ -228,12 +213,35 @@ export default function ProblemEditor(props){
                     </div>
                 </div>
 
+                <div className="problems">
+                    {problems.map((problemId, index) => (
+                        <div className="problem-container" key={problemId}>
+                            <div className="problem-header">
+                                Question {index + 1} 
+                                <button onClick={event => deleteProblemHandler(index)}>
+                                    <FontAwesomeIcon icon={faTrash}/>
+                                </button>
+                            </div>
+                            <Problem problemId={problemId} />
+                        </div>
+                    ))}
+                    {problems.length === 0 && 
+                    <div className="nothing-here">
+                        <div>
+                            <img src={NothingHereImage} alt="" />
+                        </div>
+                        <div>
+                            No questions added to this quiz!
+                        </div>
+                    </div>}
+                </div>
+
                 <div className="test-cases-container">
                     {testCases.map((testCase, index) => (
                         <div className="test-case" key={index}>
                             <div className="header">
                                 Test Case {index + 1} 
-                                <button onClick={event => onDeleteTestCase(testCase, index)}>
+                                <button>
                                     <FontAwesomeIcon icon={faTrash}/>
                                 </button>
                             </div>

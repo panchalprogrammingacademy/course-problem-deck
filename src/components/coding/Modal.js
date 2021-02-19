@@ -1,8 +1,8 @@
 import React from 'react';
-import '../Styles/Modal.scss';
+import './styles/Modal.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import TroffeIcon from '../Assets/award.png';
+import TroffeIcon from '../../assets/award.png';
 
 export default function Modal(props){
     const {onClose} = props;

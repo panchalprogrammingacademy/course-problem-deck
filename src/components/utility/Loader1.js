@@ -1,5 +1,5 @@
 import React from 'react';
-import '../Styles/Loader1.scss';
+import './styles/Loader1.scss';
 const loader1 = (props) => {
     return (
         <div id="loader1">

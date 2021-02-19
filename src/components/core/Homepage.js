@@ -1,9 +1,11 @@
+// imports
 import React from 'react';
-import '../Styles/homepage.scss';
-import AcademyIcon from '../Assets/ppa.png';
-import ExternalLink from './ExternalLink';
-import Fotter from './Fotter';
+import './styles/Homepage.scss';
+import AcademyIcon from '../../assets/ppa.png';
+import ExternalLink from '../utility/ExternalLink';
+import Fotter from '../utility/Fotter';
 
+// functional component
 const homepage = (props) => {
     document.title = "Course Problem Deck";
     const courses = [
@@ -32,8 +34,10 @@ const homepage = (props) => {
                                 <ExternalLink newWindow={true} external={true}
                                     to={course.courseLink}
                                     className="browse-course">Browse Course</ExternalLink>
-                                <ExternalLink to={"/course/" + course.id}
+                                <ExternalLink to={"/course/" + course.id + "/problems"}
                                     className="browse-problems">Browse Problems</ExternalLink>
+                                <ExternalLink to={"/course/" + course.id + "/quizzes"}
+                                    className="browse-quizzes">Browse Quizzes</ExternalLink>
                             </div>
                         );
                     });

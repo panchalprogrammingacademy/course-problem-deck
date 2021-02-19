@@ -1,14 +1,17 @@
 import React from 'react';
 import {HashRouter as Router, Redirect, Route, Switch} from 'react-router-dom';
-import Homepage from './Components/Homepage';
-import CoursePage from './Components/CoursePage';
-import PageNotFound from './Components/PageNotFound';
-import Login from './Components/Login';
-import AttemptProblem from './Components/AttemptProblem';
-import LocalStorage from './Components/LocalStorage';
-import { ToastProvider } from 'react-toast-notifications';
-import ProblemEditor from './Components/ProblemEditor';
-import {TOKEN_STRING} from './DataAccessObject/DataAccessObject';
+import ToastedNotes from './components/utility/ToastedNotes';
+
+import Homepage from './components/core/Homepage';
+import Login from './components/core/Login';
+import LocalStorage from './components/core/LocalStorage';
+import PageNotFound from './components/core/PageNotFound';
+
+import CodingCoursePage from './components/coding/CodingCoursePage';
+import AttemptCodingProblem from './components/coding/AttemptCodingProblem';
+import CodingProblemEditor from './components/coding/CodingProblemEditor';
+
+import {TOKEN_STRING} from './helpers/DataAccessObject';
 
 // defines the private route
 const PrivateRoute = ({component : Component, ...rest}) => {
@@ -23,25 +26,25 @@ const PrivateRoute = ({component : Component, ...rest}) => {
 export default function App() {
   return (
     <div className="App">
-		<ToastProvider>
+		<ToastedNotes>
 			<Router>
 				<Switch>
-					<PrivateRoute exact path="/admin/problem/new" component={ProblemEditor} />
-					<PrivateRoute exact path="/admin/problem/edit/:problemId" component={ProblemEditor} />
+					<Route exact path="/" component={Homepage} />
 					<Route exact path="/admin/login" component={Login} />
 					<Route exact path="/admin/logout" component={() => {
 						localStorage.removeItem(TOKEN_STRING);
 						return (<Redirect to="/" />);
 					}} />
-					<Route exact path="/" component={Homepage} />
-					<Route exact path="/course/the-complete-c-course" 
-						component={()=> <CoursePage courseId='the-complete-c-course' />} />
-					<Route exact path="/problem/:problemId" component={AttemptProblem} />
-					<Route path="/localStorage" component={LocalStorage} />
+					<Route exact path="/localStorage" component={LocalStorage} />
+					<PrivateRoute exact path="/admin/problem/new" component={CodingProblemEditor} />
+					<PrivateRoute exact path="/admin/problem/edit/:problemId" component={CodingProblemEditor} />
+					<Route exact path="/course/the-complete-c-course/problems" 
+						component={()=> <CodingCoursePage courseId='the-complete-c-course' />} />
+					<Route exact path="/problem/:problemId" component={AttemptCodingProblem} />
 					<Route path="/" component={PageNotFound} />
 				</Switch>
 			</Router>
-		</ToastProvider>
+		</ToastedNotes>
     </div>
   );
 }

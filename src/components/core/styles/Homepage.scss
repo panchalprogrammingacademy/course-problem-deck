@@ -2,7 +2,7 @@
     padding: 20px;
     padding-bottom: 0px;
     min-height: 100vh;
-    background: url('../Assets/background.jpg') no-repeat center center fixed; 
+    background: url('../../../assets/background.jpg') no-repeat center center fixed; 
     -webkit-background-size: cover;
     -moz-background-size: cover;
     -o-background-size: cover;
@@ -59,7 +59,8 @@
             }
 
             .browse-course{background: #17a2b8; margin-right: 10px;}
-            .browse-problems{background: #28a745;}
+            .browse-problems{background: #28a745; margin-right: 10px;}
+            .browse-quizzes{background: #17a2b8;}
         }
     }
 

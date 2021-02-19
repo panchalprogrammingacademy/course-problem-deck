@@ -1,0 +1,46 @@
+.problem{
+    .quill{
+        margin: 10px;
+        font-family: 'Libre Baskerville', serif !important;
+    }
+    .ql-toolbar{
+        font-family: 'Libre Baskerville', serif !important;
+    }
+    .ql-editor{
+        min-height: 250px;
+        font-family: 'Libre Baskerville', serif !important;
+    }
+    .ql-tooltip{
+        left: 0px !important;
+        font-family: 'Libre Baskerville', serif !important;
+        input{
+            font-family: 'Libre Baskerville', serif !important;
+        }
+    }
+    pre.ql-syntax{
+        color: black !important;
+        background-color: white !important;
+        border: 1px solid darkgray;
+    }  
+    .input-group{
+        label{
+            text-align: left;
+        }
+        select{
+            width: 100%;
+            padding: 10px;
+            font-family: 'Libre Baskerville', serif !important;
+            background-color: white;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+        }            
+    }
+
+    .col-2{
+        display: flex;
+        div:nth-child(1){
+            margin-left: 0px;
+        }
+    }
+
+}

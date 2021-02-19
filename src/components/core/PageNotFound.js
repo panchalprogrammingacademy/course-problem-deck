@@ -1,7 +1,9 @@
+// imports
 import React from 'react';
 import {HashLink as Link} from 'react-router-hash-link';
-import LostImage from '../Assets/404.gif';
+import LostImage from '../../assets/404.gif';
 
+// functional component
 const pageNotFound = (props) => {
     document.title = "Page Not Found | Course Problem Deck";
     return (

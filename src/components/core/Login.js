@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import '../Styles/Login.scss';
+import './styles/Login.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import {admin_login, TOKEN_STRING} from '../DataAccessObject/DataAccessObject';
-import Loader2 from './Loader2';
+import {admin_login, TOKEN_STRING} from '../../helpers/DataAccessObject';
+import Loader2 from '../utility/Loader2';
 import {Redirect} from 'react-router-dom';
 
 
@@ -26,6 +26,10 @@ export default function Login(props){
             let {data} = response;
             let {token} = data;
             localStorage.setItem(TOKEN_STRING, token);
+            setTimeout((token) => {
+                let item = localStorage.getItem(TOKEN_STRING);
+                if (item === token) localStorage.removeItem(TOKEN_STRING);
+            }, 60*60*1000, token);
             setRedirect(<Redirect to="/" />);
         }).catch(error => {
             let {response} = error;

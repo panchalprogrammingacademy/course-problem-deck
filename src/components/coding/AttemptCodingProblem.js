@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import '../Styles/AttemptProblem.scss';
-import Loader0 from './Loader0';
-import Loader2 from './Loader2';
-import Loader3 from './Loader3';
+import './styles/AttemptProblem.scss';
+import Loader0 from '../utility/Loader0';
+import Loader2 from '../utility/Loader2';
+import Loader3 from '../utility/Loader3';
 import Modal from './Modal';
 import ScreenResizer from './ScreenResizer';
-import {fetch_problem, execute_code} from '../DataAccessObject/DataAccessObject';
-import { useToasts } from 'react-toast-notifications';
+import {fetch_problem, execute_code} from '../../helpers/DataAccessObject';
+import { useToasts } from '../utility/ToastedNotes';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import CodeEditor from './CodeEditor';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLock, faUnlockAlt, faPaw, faCheck, faTimes, faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import {Redirect} from 'react-router-dom';
-import {saveToLocalStorage, readFromLocalStorage} from '../DataAccessObject/utility';
+import {saveToLocalStorage, readFromLocalStorage} from '../../helpers/LocalStorage';
 
 
-export default function AttemptProblem(props){
+export default function AttemptCodingProblem(props){
     let problemId = props.match.params.problemId;
     const [isLoading, setIsLoading] = useState(true);
     const [problem, setProblem] = useState(null);

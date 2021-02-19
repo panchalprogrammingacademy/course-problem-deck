@@ -1,15 +1,15 @@
 import React, {useState, useEffect} from 'react';
-import '../Styles/CoursePage.scss';
-import AcademyIcon from '../Assets/ppa.png';
-import Fotter from './Fotter';
-import Loader1 from './Loader1';
-import {course_problems} from '../DataAccessObject/DataAccessObject';
+import './styles/CoursePage.scss';
+import AcademyIcon from '../../assets/ppa.png';
+import Fotter from '../utility/Fotter';
+import Loader1 from '../utility/Loader1';
+import {course_problems} from '../../helpers/DataAccessObject';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
-import ExternalLink from './ExternalLink';
-import {isProblemSolved} from '../DataAccessObject/utility';
+import ExternalLink from '../utility/ExternalLink';
+import {isProblemSolved} from '../../helpers/LocalStorage';
 
-export default function CoursePage(props){
+export default function CodingCoursePage(props){
     const courseId = props.courseId;
     const [isLoading, setIsLoading] = useState(true);
     const [problems, setProblems] = useState([]);

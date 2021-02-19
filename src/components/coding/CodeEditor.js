@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../Styles/CodeEditor.scss';
+import './styles/CodeEditor.scss';
 import AceEditor from "react-ace";
 import 'ace-builds/src-noconflict/theme-ambiance';
 import 'ace-builds/src-noconflict/theme-chaos';

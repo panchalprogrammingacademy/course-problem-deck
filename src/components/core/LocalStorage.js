@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import '../Styles/CoursePage.scss';
-import AcademyIcon from '../Assets/ppa.png';
-import Fotter from './Fotter';
+import './styles/LocalStorage.scss';
+import AcademyIcon from '../../assets/ppa.png';
+import Fotter from '../utility/Fotter';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt, faFileDownload, faCheck } from '@fortawesome/free-solid-svg-icons';
-import { useToasts } from 'react-toast-notifications';
-import ExternalLink from './ExternalLink';
+import { useToasts } from '../utility/ToastedNotes';
+import ExternalLink from '../utility/ExternalLink';
 
 // component to be rendered
 export default function LocalStorage(props){
@@ -56,7 +56,7 @@ export default function LocalStorage(props){
     // actual component to be rendered
     document.title = "Local Storage | Course Problem Deck";
     return (
-        <div id="course-page">
+        <div id="local-storage">
             <div className="header">
                 <img src={AcademyIcon} alt="academyIcon" />
                 <h1>Solutions saved to local storage</h1>
