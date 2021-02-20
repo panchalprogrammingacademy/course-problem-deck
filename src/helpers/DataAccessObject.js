@@ -3,13 +3,19 @@ import axios from 'axios';
 import {BASE_URL, TOKEN_STRING} from './CONSTANTS';
 // configurations
 axios.defaults.baseURL = BASE_URL;
-axios.defaults.headers = {
-    'Content-Type': 'application/json',
-    'token': localStorage.getItem(TOKEN_STRING)
-};
+// set the authToken before making a request
+axios.interceptors.request.use(req => {
+    req.headers = {
+        'Content-Type': 'application/json',
+        'token': localStorage.getItem(TOKEN_STRING),
+    };
+    return req;
+}, err => {
+    return new Promise.reject(err);
+});
 
 // logins the user with given credentials
-export const admin_login = (email, password) => {
+export const adminLogin = (email, password) => {
     return new Promise(function(resolve, reject){
         axios.post('/admin/login',{email, password})
             .then(response => resolve(response))
@@ -19,15 +25,19 @@ export const admin_login = (email, password) => {
 
 // export helpers from CodingProblems
 export {
-    verify_and_fetch_problem,
-    save_problem,
-    delete_problem,
-    course_problems,
-    fetch_problem,
-    execute_code
+    saveProblemToBackend,
+    deleteProblemFromBackend,
+    readAllProblemsFromBackend,
+    readProblemFromBackend,
+    readProblemWithTokenVerification,
+    runCodeOnBackend
 } from './CodingProblems';
 
 // export helpers from Quizlet
 export {
-
+    saveQuizToBackend,
+    deleteQuizFromBackend,
+    readAllQuizzesFromBackend,
+    readQuizFromBackend,
+    readQuizWithTokenVerification
 } from './Quizlet';

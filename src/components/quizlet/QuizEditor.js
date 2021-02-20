@@ -2,13 +2,13 @@ import React, { useEffect, useState, useCallback } from 'react';
 import './styles/QuizEditor.scss';
 import ExternalLink from '../utility/ExternalLink';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faCalendarCheck, faTimes, faTrash, faDirections } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faCalendarCheck, faTimes, faCheck, faTrash, faDirections } from '@fortawesome/free-solid-svg-icons';
 import { useToasts } from '../utility/ToastedNotes';
 import Question from './Question';
 import Loader1 from '../utility/Loader1';
 import { v4 as uuidv4 } from 'uuid';
 import NothingHereImage from '../../assets/nothing.webp';
-import {verify_and_fetch_problem, save_problem, CLIENT_URL, delete_problem, TOKEN_STRING} from '../../helpers/DataAccessObject';
+import {deleteQuizFromBackend, readQuizWithTokenVerification, saveQuizToBackend} from '../../helpers/Quizlet';
 import {Redirect} from 'react-router-dom';
 import Fotter from '../utility/Fotter';
 import * as questionTypes from '../../helpers/QuestionTypes';
@@ -16,18 +16,17 @@ import * as questionTypes from '../../helpers/QuestionTypes';
 
 // functional component
 export default function QuizEditor(props){
-
     const [isLoading, setIsLoading] = useState(false);
-    const [quizId, setQuizId] = useState(null);
+    const [quizId, setQuizId] = useState(props.match.params.quizId);
     const [title, setTitle] = useState('');
     const [timeLimit, setTimeLimit] = useState(0);
     const [tags, setTags] = useState([]);
     const [questions, setQuestions] = useState([
-        { id: uuidv4(), ref: React.createRef()}
+        {id: uuidv4(), ref: React.createRef()}
     ]);
     const [tagText, setTagText] = useState('');
     const [redirect, setRedirect] = useState(null);
-    const { addToast } = useToasts();
+    const { addToast, removeToast } = useToasts();
 
 
     // displays the toast with error message
@@ -79,6 +78,56 @@ export default function QuizEditor(props){
         }
         setQuestions(oldQuestions);
     };
+    // adds the id and ref properties to each question
+    const filterAndSetQuestions = (questionsList) => {
+        let newQuestionsList = questionsList.map(question => ({
+            ...question,
+            id: uuidv4(),
+            ref: React.createRef()
+        }));
+        setQuestions(newQuestionsList);
+    };
+
+
+    // update the properties of the problem
+    const handleAPISuccess = useCallback((response, saved) => {
+        let {data} = response;
+        let {quiz} = data;
+        if (!quiz)   flagError(`Server couldn't process your request`);
+        // update all the properties of the quiz
+        setQuizId(quiz._id);  
+        setTitle(quiz.title);
+        setTimeLimit(quiz.timeLimit);
+        setTags(quiz.tags);
+        filterAndSetQuestions(quiz.questionsList);
+        // update the location to edit
+        let hash = "#/admin/quiz/edit/" + quiz._id;
+        if (window.location.hash !== hash)   setRedirect(<Redirect to={"/admin/quiz/edit/" + quiz._id} />);
+        // display toast on success
+        if (saved) addToast(`Your quiz was successfully saved!`, {appearance: 'success', autoDismiss: false});
+        // the problem was found successfully so close the loader
+        setIsLoading(false);
+    }, [flagError, addToast]);
+    // handles the API error
+    const handleAPIError = useCallback((error) => {
+        if (error.response && error.response.data)  flagError(error.response.data.message);
+        else                                        flagError(`Failed to process your request!`);
+        setIsLoading(false);
+    }, [flagError]);
+
+    // loads the problem from database if problemId is provided
+    useEffect(function(){
+        if (!quizId) return;
+        setIsLoading(true);
+        readQuizWithTokenVerification(quizId)
+        .then(response => handleAPISuccess(response, false))
+        .catch((error) => {
+            if (error.response && error.response.data)  flagError(error.response.data.message);
+            else                                        flagError(`Failed to process your request!`);
+            setRedirect(<Redirect to="/" />);
+        });
+    }, [quizId, flagError, handleAPISuccess]);
+    
 
 
     // event handler for save quiz
@@ -119,8 +168,12 @@ export default function QuizEditor(props){
             let {ref} = questions[i];
             if (ref.current) {
                 let question = {...ref.current.state};
-                let {questionType, score, options, expectedAnswer} = question;
-                questionsList.push(question);
+                let {
+                    score,
+                    options,
+                    expectedAnswer,
+                    questionType,
+                } = question;
                 let points = null;
                 try{points = parseInt(score)} catch(error){ }
                 if (!points) {
@@ -165,80 +218,83 @@ export default function QuizEditor(props){
                         return;
                     }
                 }
+                
+                // update the score to integral value
+                question['score'] = points;
+                // add the question to list of questions
+                questionsList.push(question);
             }
         }
-        // we can proceed to save the quiz to server
-        console.log(questionsList);
+
+        // construct the quiz
+        let quiz = {
+            quizId,
+            title,
+            timeLimit : time,
+            tags,
+            questionsList
+        };
+        // update the list of questions
+        filterAndSetQuestions(quiz.questionsList);
+        setIsLoading(true);
+        saveQuizToBackend(quiz)
+        .then(response => handleAPISuccess(response, true))
+        .catch(handleAPIError)
     };
 
+    // delete quiz handler
+    const deleteQuizHandler = () => {
+        setIsLoading(true);
+        deleteQuizFromBackend(quizId).then(response => {
+            addToast(response.data.message, {appearance: 'success', autoDismiss: true});
+            setRedirect(<Redirect to="/" />);
+        }).catch(error => {
+            console.log(error);
+            if (error.response && error.response.data)
+                flagError(error.response.data.message);
+            setIsLoading(false);
+        });
 
-
-    // // update the properties of the problem
-    // const handleAPISuccess = useCallback((response, saved) => {
-    //     let {data} = response;
-    //     let {problem} = data;
-    //     if (!problem)   flagError(`Server couldn't process your request`);
-    //     console.log(problem);
-    //     // update all the properties of the problem
-    //     setQuestionId(problem._id);  
-    //     setTitle(problem.title);
-    //     setTimeLimit(problem.timeLimit);
-    //     let statement = String(problem.problemStatement);
-    //     let problemHTML = statement.replaceAll(/(<p><br><\/p>)+/g, `<p><br></p>`);
-    //     setQuestionStatement(problemHTML);
-    //     setTags(problem.tags);
-    //     setTestCases(problem.testCases);
-    //     // update the location to edit
-    //     let url = CLIENT_URL + "/#/admin/problem/edit/" + problem._id;
-    //     if (window.location.href !== url)   window.location.href = url;
-    //     // display toast on success
-    //     if (saved) addToast(`Your problem was successfully saved!`, {appearance: 'success', autoDismiss: false});
-    //     // the problem was found successfully so close the loader
-    //     setIsLoading(false);
-    // }, [flagError, addToast]);
-    // // handles the API error
-    // const handleAPIError = useCallback((error) => {
-    //     console.log(error);
-    //     let {response} = error;
-    //     let {data} = response;
-    //     let {message} = data;
-    //     flagError(message);
-    //     setIsLoading(false);
-    // }, [flagError]);
-
-
-    // // loads the problem from database if questionId is provided
-    // useEffect(function(){
-    //     if (!questionId) return;
-    //     setIsLoading(true);
-    //     verify_and_fetch_problem(questionId)
-    //     .then(response => handleAPISuccess(response, false))
-    //     .catch((error) => {
-    //         console.log(error);
-    //         localStorage.removeItem(TOKEN_STRING);
-    //         setRedirect(<Redirect to="/" />);
-    //     });
-    // }, [questionId, addToast, handleAPISuccess, handleAPIError]);
+    };
+    // shows modal for delete quiz
+    const onDeleteQuiz = (event => {
+        if (!event.isTrusted)   return;
+        if (isLoading)  return;
+        let toastId = uuidv4();
+        let item = (
+            <div className="delete-problem-modal">
+                <div className="close-modal">
+                    <div>
+                        <strong>Confirm deletion</strong>
+                    </div>
+                    <button onClick={() => removeToast(toastId)} className="button">
+                        <FontAwesomeIcon icon={faTimes} />
+                    </button>
+                </div>
+                <p>
+                    Are you sure you want to delete this problem? <br/>
+                    This is a potentially destructive operation and cannot be undone.
+                </p>
+                <div>
+                    <button className="button success"
+                        onClick={() => {
+                            removeToast(toastId);
+                            deleteQuizHandler();
+                        }}>
+                        <FontAwesomeIcon icon={faCheck} /> Proceed
+                    </button>
+                    <button className="button danger"
+                        onClick={() => removeToast(toastId)}>
+                        <FontAwesomeIcon icon={faTimes} /> Abort
+                    </button>
+                </div>
+            </div>
+        );
+        addToast(item, {appearance: `none`, position: `center`, toastId});
+    });
     
-    // // handles the submit form 
-    // const onSaveQuestion = (event) => {
-    //     if (!event.isTrusted)   return;
-    //     if (isLoading)  return;
-    //     // validate problems properties
-    //     if (title.trim() === '')    return flagError('Please provide a valid title');
-    //     if (timeLimit < 1)          return flagError('Time limit has to be at least 1ms');
-    //     if (problemStatement === '')    return flagError('Please provide a problem statement');
-    //     if (testCases.length === 0) return flagError('Please provide at least one test-case');
-    //     for (let i = 0; i < testCases.length; ++i)
-    //         if (testCases[i].points < 1)    return flagError('Points must be at least 1 for test-case ' + (i + 1));
-    //     // everything is valid for the problem
-    //     // now we go ahead and save the problem
-    //     setIsLoading(true);
-    //     save_problem(questionId, title, timeLimit, 
-    //         problemStatement, tags, testCases)
-    //     .then(response => handleAPISuccess(response, true))
-    //     .catch(handleAPIError)
-    // };
+
+
 
     // // handles the problem delete request
     // const onDeleteQuestion = (event => {
@@ -323,11 +379,11 @@ export default function QuizEditor(props){
                         <Question 
                             key={question.id}
                             ref={question.ref}
+                            question={question}
                             index={index}
                             deleteHandler={deleteQuestionHandler}
                             moveUpHandler={moveUpHandler}
                             moveDownHandler={moveDownHandler}
-                            questionId={question.id}
                             disabledUp={index === 0}
                             disabledDown={index === questions.length - 1}
                         />
@@ -346,13 +402,13 @@ export default function QuizEditor(props){
                 <div className="sticky-footer">
                     {quizId && 
                     <button className="secondary">
-                        <ExternalLink to={"/problem/" + quizId} 
+                        <ExternalLink to={"/quiz/" + quizId} 
                             newWindow={true} className="browse-problem">
                             <FontAwesomeIcon icon={faDirections}/>
                         </ExternalLink>
                     </button>}
                     {quizId && 
-                    <button className="danger">
+                    <button className="danger" onClick={onDeleteQuiz}>
                         <FontAwesomeIcon icon={faTrash}/>
                     </button>}
                     <button className="info" onClick={addQuestionHandler}>

@@ -5,7 +5,7 @@ import Loader2 from '../utility/Loader2';
 import Loader3 from '../utility/Loader3';
 import Modal from './Modal';
 import ScreenResizer from './ScreenResizer';
-import {fetch_problem, execute_code} from '../../helpers/DataAccessObject';
+import {readProblemFromBackend, runCodeOnBackend} from '../../helpers/DataAccessObject';
 import { useToasts } from '../utility/ToastedNotes';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -39,7 +39,7 @@ export default function AttemptCodingProblem(props){
 
     // fetches the problem from server!
     useEffect(function(){
-        fetch_problem(problemId).then(response => {
+        readProblemFromBackend(problemId).then(response => {
             let {data} = response;
             if (data.error) {
                 setRedirect(<Redirect to="/" />);
@@ -112,7 +112,7 @@ export default function AttemptCodingProblem(props){
         setDisabled(true);
         saveToLocalStorage(problem._id, problem.title, code, language);
         if (customTest) {
-            execute_code(code, language, problem.timeLimit, customInput, customCMD)
+            runCodeOnBackend(code, language, problem.timeLimit, customInput, customCMD)
             .then(response => {
                 let data = response.data;
                 if (data.error) setCustomResult({isError: true, message: data.error});
@@ -133,7 +133,7 @@ export default function AttemptCodingProblem(props){
             setProblem({...problem, testCases: testCases});
             for (let i = 0; i < testCases.length; ++i) {
                 let  tc = testCases[i];
-                execute_code(code, language, problem.timeLimit, tc.input, tc.cmd)
+                runCodeOnBackend(code, language, problem.timeLimit, tc.input, tc.cmd)
                 .then(response => {
                     let data = response.data;
                     let executionOutput = data.error || data.stderr || data.stdout;

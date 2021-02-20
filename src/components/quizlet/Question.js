@@ -8,12 +8,12 @@ import * as questionTypes from '../../helpers/QuestionTypes';
 // functional component
 class Question extends React.Component{
     state = {
-        problemStatement: '',
-        justification: '',
-        score: 2,
-        options: [],
-        expectedAnswer: '',
-        questionType: questionTypes.MULTIPLE_CHOICE,
+        problemStatement: this.props.question.problemStatement || '',
+        justification: this.props.question.justification || '',
+        score: this.props.question.score || 2,
+        options: this.props.question.options || [],
+        expectedAnswer: this.props.question.expectedAnswer || '',
+        questionType: this.props.question.questionType || questionTypes.MULTIPLE_CHOICE,
     };
     setProperty = (name, value) => this.setState(prevState => ({...prevState, [name]: value}));
     setProblemStatement = (value) => this.setProperty(`problemStatement`, value);
@@ -64,7 +64,7 @@ class Question extends React.Component{
     render = () => {
         // destructure the properties
         let {
-            questionId,
+            question,
             deleteHandler,
             moveUpHandler,
             moveDownHandler,
@@ -86,13 +86,15 @@ class Question extends React.Component{
         let {questionType} = this.state;
         if (questionType === questionTypes.MULTIPLE_CHOICE) inputType = `radio`;
         if (questionType === questionTypes.CHECKBOXES)      inputType = `checkbox`;
+        let questionId = question.id;
+
         return (
-            <div className="problem">
-                <div className="problem-header">
+            <div className="question">
+                <div className="question-header">
                     <div>
                         <span>Question {index + 1}</span>                 
                     </div>
-                    <div className="problem-header-options">
+                    <div className="question-header-options">
                         <div className="input-group">
                             <input type="number" min="0" max="100" 
                                 id={questionId} value={this.state.score}

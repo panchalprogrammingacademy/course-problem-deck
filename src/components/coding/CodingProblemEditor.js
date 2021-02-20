@@ -7,11 +7,12 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useToasts } from '../utility/ToastedNotes';
 import Loader1 from '../utility/Loader1';
-import {verify_and_fetch_problem, save_problem, delete_problem} from '../../helpers/DataAccessObject';
-import {TOKEN_STRING} from '../../helpers/CONSTANTS';
 import {Redirect} from 'react-router-dom';
 import Fotter from '../utility/Fotter';
 import { v4 as uuidv4 } from 'uuid';
+import {readProblemWithTokenVerification, 
+    saveProblemToBackend, deleteProblemFromBackend} 
+    from '../../helpers/DataAccessObject';
 
 // configuration for quill-editor
 const EditorModules = {
@@ -109,11 +110,8 @@ export default function CodingProblemEditor(props){
     }, [flagError, addToast]);
     // handles the API error
     const handleAPIError = useCallback((error) => {
-        console.log(error);
-        let {response} = error;
-        let {data} = response;
-        let {message} = data;
-        flagError(message);
+        if (error.response && error.response.data)  flagError(error.response.data.message);
+        else                                        flagError(`Failed to process your request!`);
         setIsLoading(false);
     }, [flagError]);
 
@@ -122,14 +120,14 @@ export default function CodingProblemEditor(props){
     useEffect(function(){
         if (!problemId) return;
         setIsLoading(true);
-        verify_and_fetch_problem(problemId)
+        readProblemWithTokenVerification(problemId)
         .then(response => handleAPISuccess(response, false))
         .catch((error) => {
             console.log(error);
-            localStorage.removeItem(TOKEN_STRING);
+            flagError(error.response.data.message);
             setRedirect(<Redirect to="/" />);
         });
-    }, [problemId, addToast, handleAPISuccess, handleAPIError]);
+    }, [problemId, flagError, handleAPISuccess, handleAPIError]);
     
     // handles the submit form 
     const onSaveProblem = (event) => {
@@ -145,8 +143,15 @@ export default function CodingProblemEditor(props){
         // everything is valid for the problem
         // now we go ahead and save the problem
         setIsLoading(true);
-        save_problem(problemId, title, timeLimit, 
-            problemStatement, tags, testCases)
+        let problemToSave = {
+            problemId,
+            title,
+            timeLimit,
+            problemStatement,
+            tags, 
+            testCases
+        };
+        saveProblemToBackend(problemToSave)
         .then(response => handleAPISuccess(response, true))
         .catch(handleAPIError)
     };
@@ -154,14 +159,13 @@ export default function CodingProblemEditor(props){
     // deletes the problem
     const deleteProblemHandler = () => {
         setIsLoading(true);
-        delete_problem(problemId).then(response => {
+        deleteProblemFromBackend(problemId).then(response => {
+            addToast(response.data.message, {appearance: 'success', autoDismiss: true});
             setRedirect(<Redirect to="/" />);
         }).catch(error => {
             console.log(error);
-            let {response} = error;
-            let {data} = response;
-            let {message} = data;
-            flagError(message);
+            if (error.response && error.response.data)
+                flagError(error.response.data.message);
             setIsLoading(false);
         });
     };

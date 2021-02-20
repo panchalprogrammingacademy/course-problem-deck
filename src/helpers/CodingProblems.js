@@ -1,54 +1,55 @@
 // imports
 import axios from 'axios';
-import {TOKEN_STRING} from './CONSTANTS';
 
-// reads the problem with given id
-export const verify_and_fetch_problem = (problemId) => {
-    let token = localStorage.getItem(TOKEN_STRING);
-    return new Promise(function(resolve, reject){
-        axios.post('/admin/problem/', {problemId, token})
-            .then(response => resolve(response))
-                .catch(err => reject(err));
-    });
-};
 // saves the problem
-export const save_problem = (problemId, title, timeLimit, problemStatement, tags, testCases) => {
-    let token = localStorage.getItem(TOKEN_STRING);
-    let payload = {token, problemId, title, timeLimit, problemStatement, tags, testCases};
+export const saveProblemToBackend = (problem) => {
+    let {problemId, title, timeLimit, problemStatement, tags, testCases} = problem;
+    let payload = {problemId, title, timeLimit, problemStatement, tags, testCases};
     return new Promise(function(resolve, reject){
         axios.post('/admin/problem/save', payload)
             .then(response => resolve(response))
                 .catch(err => reject(err));
     });
 };
-// deletes the problem
-export const delete_problem = (problemId) => {
-    let token = localStorage.getItem(TOKEN_STRING);
-    let payload = {token, problemId};
+
+// deletes the problem on backend
+export const deleteProblemFromBackend = (problemId) => {
     return new Promise(function(resolve, reject){
-        axios.post('/admin/problem/delete', payload)
+        axios.post('/admin/problem/delete', {problemId})
             .then(response => resolve(response))
                 .catch(err => reject(err));
     });
 };
+
 // reads all the problems for the given courseId
-export const course_problems = (courseId) => {
+export const readAllProblemsFromBackend = (courseId) => {
     return new Promise(function(resolve, reject){
-        axios.get('/course/' + courseId)
+        axios.get('/course/' + courseId + "/problems")
             .then(response => resolve(response))
                 .catch(err => reject(err));
     });
 };
-// reads the problem with given id
-export const fetch_problem = (problemId) => {
+
+// reads the problem with given Id
+export const readProblemFromBackend = (problemId) => {
     return new Promise(function(resolve, reject){
         axios.get('/problem/' + problemId)
             .then(response => resolve(response))
                 .catch(err => reject(err));
     });
 };
+
+// reads the problem after token verification
+export const readProblemWithTokenVerification = (problemId) => {
+    return new Promise(function(resolve, reject){
+        axios.get('/admin/problem/' + problemId)
+            .then(response => resolve(response))
+                .catch(err => reject(err));
+    });
+};
+
 // executes the user's source code
-export const execute_code = (sourceCode, language, timeLimit, input, cmd) => {
+export const runCodeOnBackend = (sourceCode, language, timeLimit, input, cmd) => {
     const payload = {sourceCode, language, timeLimit, input, cmd};
     return new Promise(function(resolve, reject){
         axios.post('/execute/problem', payload)

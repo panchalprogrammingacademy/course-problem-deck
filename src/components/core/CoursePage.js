@@ -3,14 +3,14 @@ import './styles/CoursePage.scss';
 import AcademyIcon from '../../assets/ppa.png';
 import Fotter from '../utility/Fotter';
 import Loader1 from '../utility/Loader1';
-import {course_problems} from '../../helpers/DataAccessObject';
+import {readAllProblemsFromBackend, readAllQuizzesFromBackend} from '../../helpers/DataAccessObject';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 import ExternalLink from '../utility/ExternalLink';
 import {isProblemSolved} from '../../helpers/LocalStorage';
 
-export default function CodingCoursePage(props){
-    const courseId = props.courseId;
+export default function CoursePage(props){
+    const {courseId, type} = props;
     const [isLoading, setIsLoading] = useState(true);
     const [problems, setProblems] = useState([]);
     const [filteredProblems, setFilteredProblems] = useState([]);
@@ -20,11 +20,12 @@ export default function CodingCoursePage(props){
 
     // fetches the problems from server
     useEffect(function(){
-        course_problems(courseId).then(response => {
+        let functionToInvoke = (type === "problems" ? readAllProblemsFromBackend : readAllQuizzesFromBackend);
+        functionToInvoke(courseId).then(response => {
             let {data} = response;
             if (data.error)  setErrorMessage(data.error);
             else {
-                let problems = data.problems || [];
+                let problems = data.problems || data.quizzes || [];
                 problems.sort( (i1, i2) => i1.title.localeCompare(i2.title));
                 setProblems(problems);
                 setFilteredProblems(problems);
@@ -34,7 +35,7 @@ export default function CodingCoursePage(props){
         }).finally(() => {
             setIsLoading(false);
         });
-    }, [courseId]);
+    }, [courseId, type]);
 
     // listens to the filter-change
     useEffect(function(){
@@ -56,7 +57,10 @@ export default function CodingCoursePage(props){
         <div id="course-page">
             <div className="header">
                 <img src={AcademyIcon} alt="academyIcon" />
-                <h1>{courseId.replaceAll('-', ' ')}</h1>
+                <h1>
+                    {courseId.replaceAll('-', ' ')}<br/>
+                    ({type === "problems" ? "Coding Problems" : "Quizzes"})
+                </h1>
             </div>
             {isLoading && <Loader1 text="Please wait. I'm fetching problems from server!"/>}
             {errorMessage && <div className="error-message">{errorMessage}</div>}
@@ -95,7 +99,7 @@ export default function CodingCoursePage(props){
                     return (
                         <div className="problem" key={problem._id}>
                             {isProblemSolved(problem._id) && <span><FontAwesomeIcon icon={faCheck} /></span>}
-                            <ExternalLink to={"/problem/" + problem._id} 
+                            <ExternalLink to={`/${type === 'problems' ? 'problem' : 'quiz'}/` + problem._id} 
                                 newWindow={true} className="problem-title">
                                 {problem.title}
                             </ExternalLink>

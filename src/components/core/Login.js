@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './styles/Login.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import {admin_login} from '../../helpers/DataAccessObject';
+import {adminLogin} from '../../helpers/DataAccessObject';
 import {TOKEN_STRING} from '../../helpers/CONSTANTS';
 import Loader2 from '../utility/Loader2';
 import {Redirect} from 'react-router-dom';
@@ -23,7 +23,7 @@ export default function Login(props){
         event.preventDefault();
         if (isLoading)  return;
         setIsLoading(true);
-        admin_login(email, password).then(response => {
+        adminLogin(email, password).then(response => {
             let {data} = response;
             let {token} = data;
             localStorage.setItem(TOKEN_STRING, token);

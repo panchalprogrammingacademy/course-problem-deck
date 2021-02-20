@@ -5,7 +5,7 @@ import Homepage from './components/core/Homepage';
 import Login from './components/core/Login';
 import LocalStorage from './components/core/LocalStorage';
 import PageNotFound from './components/core/PageNotFound';
-import CodingCoursePage from './components/coding/CodingCoursePage';
+import CoursePage from './components/core/CoursePage';
 import AttemptCodingProblem from './components/coding/AttemptCodingProblem';
 import CodingProblemEditor from './components/coding/CodingProblemEditor';
 import QuizEditor from './components/quizlet/QuizEditor';
@@ -33,13 +33,21 @@ export default function App() {
 						localStorage.removeItem(TOKEN_STRING);
 						return (<Redirect to="/" />);
 					}} />
+					<Route exact path="/course/the-complete-c-course/problems" 
+						component={()=> <CoursePage type="problems" courseId='the-complete-c-course' />} />
+					<Route exact path="/course/the-complete-c-course/quizzes" 
+						component={()=> <CoursePage type="quizzes" courseId='the-complete-c-course' />} />
+					<Route exact path="/problem/:problemId" component={AttemptCodingProblem} />
 					<Route exact path="/localStorage" component={LocalStorage} />
+
 					<PrivateRoute exact path="/admin/new/problem" component={CodingProblemEditor} />
 					<PrivateRoute exact path="/admin/problem/edit/:problemId" component={CodingProblemEditor} />
 					<PrivateRoute exact path="/admin/new/quiz" component={QuizEditor} />
-					<Route exact path="/course/the-complete-c-course/problems" 
-						component={()=> <CodingCoursePage courseId='the-complete-c-course' />} />
-					<Route exact path="/problem/:problemId" component={AttemptCodingProblem} />
+					<PrivateRoute exact path="/admin/quiz/edit/:quizId" component={QuizEditor} />
+
+					<Route exact path="/course/:courseId" render={(props) => {
+						return (<Redirect to={"/course/" + props.match.params.courseId + "/problems"} />)
+					}} />
 					<Route path="/" component={PageNotFound} />
 				</Switch>
 			</Router>

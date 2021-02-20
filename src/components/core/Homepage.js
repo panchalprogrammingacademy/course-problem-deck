@@ -31,13 +31,15 @@ const homepage = (props) => {
                                 <h1>{course.title}</h1>
                                 <p className="instructor">{course.instructor}</p>
                                 <p className="subtitle">{course.subtitle}</p>
-                                <ExternalLink newWindow={true} external={true}
-                                    to={course.courseLink}
-                                    className="browse-course">Browse Course</ExternalLink>
-                                <ExternalLink to={"/course/" + course.id + "/problems"}
-                                    className="browse-problems">Browse Problems</ExternalLink>
-                                <ExternalLink to={"/course/" + course.id + "/quizzes"}
-                                    className="browse-quizzes">Browse Quizzes</ExternalLink>
+                                <div className="course-options">
+                                    <ExternalLink newWindow={true} external={true}
+                                        to={course.courseLink}
+                                        className="browse-course">Browse Course</ExternalLink>
+                                    <ExternalLink to={"/course/" + course.id + "/problems"}
+                                        className="browse-problems">Browse Problems</ExternalLink>
+                                    <ExternalLink to={"/course/" + course.id + "/quizzes"}
+                                        className="browse-quizzes">Browse Quizzes</ExternalLink>
+                                </div>
                             </div>
                         );
                     });
