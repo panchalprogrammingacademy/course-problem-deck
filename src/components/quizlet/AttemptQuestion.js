@@ -11,8 +11,7 @@ class Question extends React.Component{
     state = {
         userAnswer: '',
         userOptions: this.props.question.options.map(option => ({...option, checked: false})),
-        touched: false,
-        updatedUserScore: false
+        touched: false
     };
     setProperty = (name, value) => this.setState(prevState => {
         if (!prevState.touched) {this.props.incrementAttempted();}
@@ -24,12 +23,6 @@ class Question extends React.Component{
     });
     setUserOptions = (value) => this.setProperty(`userOptions`, value);
     setUserAnswer = (value) => this.setProperty(`userAnswer`, value);
-    setUpdatedUserScore = (value) => this.setProperty(`updatedUserScore`, value);
-
-    // componentDidUpdate = () => {
-    //     if (this.updatedUserScore)  return;
-    //     this.props.incrementUserScore(10);
-    // };
 
     // updates the option content
     updateOptionHandler = (index) => {
@@ -80,7 +73,7 @@ class Question extends React.Component{
         let correct = null, incorrect = null;
         if (result) {
             correct = this.decideResult();
-            incorrect = !correct;    
+            incorrect = !correct;   
         }
         let inputType = null;
         if (questionType === questionTypes.MULTIPLE_CHOICE) inputType = `radio`;
@@ -90,7 +83,6 @@ class Question extends React.Component{
         if (correct)    headersClassList.push('correct');
         if (incorrect)  headersClassList.push('incorrect');
 
-        console.log('rendering question ' + index);
         // actual ui to be rendered
         return (
             <div className="question attempt-question">

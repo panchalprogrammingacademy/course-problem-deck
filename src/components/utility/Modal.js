@@ -3,21 +3,11 @@ import './styles/Modal.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import TroffeIcon from '../../assets/award.png';
+import {randomCongratsMessage} from './CongratsMessage';
 
 export default function Modal(props){
-    const {onClose} = props;
-    const messages = [
-        `Woo Hoo! Good for you! Congrats!`,
-        `Way to go! Congrats!`,
-        `Congratulations! You did it! Still clapping!`,
-        `Great work! You totally nailed it!`,
-        `Totally superb job! Congrats!`,
-        `Well done! You totally rocked!`,
-        `Congrats! Above and beyond!`,
-        `Congratulations! You've got, all of it!`,
-    ];
-    const index = Math.floor((Math.random() * messages.length));
-    let text = messages[index];
+    const {message, onClose} = props;
+    let text = randomCongratsMessage();
     return (
         <div className="modal">
             <div className="modal-content box-shadow drop-animation">
@@ -29,7 +19,7 @@ export default function Modal(props){
                     <div><img src={TroffeIcon} alt=""/></div>
                     <div>
                         <div className="message">
-                            You have passed all the test-cases! <br/>
+                            {message}<br/>
                             {text}
                         </div>
                         {/* <div>

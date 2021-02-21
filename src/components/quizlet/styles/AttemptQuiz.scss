@@ -30,9 +30,26 @@
             > span{
                 margin: 5px 0px;
                 margin-right: 10px;
+                text-align: center;
                 svg{
                     margin-right: 5px;
                 }
+                cursor: not-allowed;
+            }
+            > span:nth-child(1){
+                width: 150px;
+            }
+            > span:nth-child(2){
+                width: 100px;
+            }
+            .blink{
+                background-color: #dc3543;
+                animation: blinker 1s linear infinite;
+            }
+            @keyframes blinker {
+                50%{
+                    color: transparent;
+                }                
             }
         }
     }

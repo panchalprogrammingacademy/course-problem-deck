@@ -3,7 +3,7 @@ import './styles/AttemptProblem.scss';
 import Loader0 from '../utility/Loader0';
 import Loader2 from '../utility/Loader2';
 import Loader3 from '../utility/Loader3';
-import Modal from './Modal';
+import Modal from '../utility/Modal';
 import ScreenResizer from './ScreenResizer';
 import {readProblemFromBackend, runCodeOnBackend} from '../../helpers/DataAccessObject';
 import { useToasts } from '../utility/ToastedNotes';
@@ -174,7 +174,11 @@ export default function AttemptCodingProblem(props){
     document.title = problem.title + " | Course Problem Deck";
     return (
         <div id="attempt-problem">
-            {showModal && <Modal onClose={() => setShowModal(false)} />}
+            {showModal && 
+            <Modal 
+                message="You have passed all the test cases!"
+                onClose={() => setShowModal(false)} 
+            />}
             <div className={`left ${print ? 'full-flex' : ''}`} id="left">
                 {print && <a href="/">{window.location.href}</a>}
                 <div className="problem-header">
