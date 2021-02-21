@@ -292,29 +292,7 @@ export default function QuizEditor(props){
         );
         addToast(item, {appearance: `none`, position: `center`, toastId});
     });
-    
 
-
-
-    // // handles the problem delete request
-    // const onDeleteQuestion = (event => {
-    //     if (!event.isTrusted)   return;
-    //     if (isLoading)  return;
-    //     setIsLoading(true);
-    //     delete_problem(questionId).then(response => {
-    //         setRedirect(<Redirect to="/" />);
-    //     }).catch(error => {
-    //         console.log(error);
-    //         let {response} = error;
-    //         let {data} = response;
-    //         let {message} = data;
-    //         flagError(message);
-    //         setIsLoading(false);
-    //     });
-    // });
-
-
-    // 
 
     if (redirect)   return redirect;
     document.title = (quizId ? "Edit" : "Create") + " Quiz | Quizlet";

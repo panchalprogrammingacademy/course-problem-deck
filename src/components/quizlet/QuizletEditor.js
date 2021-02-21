@@ -17,10 +17,11 @@ const EditorModules = {
 };
 // functional component
 export default function QuizletEditor(props) {
-    const {content, setContent, placeholder} = props;
+    const {content, setContent, placeholder, readOnly} = props;
     return (
         <div className="quizlet_editor">
             <ReactQuill 
+                readOnly={readOnly}
                 value={content} 
                 onChange={setContent}
                 placeholder={placeholder} 

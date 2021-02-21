@@ -1,0 +1,61 @@
+#attempt-quiz{
+    font-family: 'Libre Baskerville', serif !important;
+    overflow-x: hidden;
+    .sticky{
+        width: 100%;
+        position: fixed;
+        box-shadow: 0 1px 3px 0 rgba(60, 64, 67, 0.3), 0 4px 8px 3px rgba(60, 64, 67, 0.15);            
+        background-color: white;
+        z-index: 1000;
+        top: 0px;
+    }
+    .header{
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        padding: 10px;
+        .quiz-metadata{
+            .title{
+                font-size: 30px;
+                font-weight: bold;
+            }
+            .score{
+                text-transform: uppercase;
+            }
+        }
+        .quiz-operations{
+            display: flex;
+            flex-wrap: wrap;
+            > span{
+                margin: 5px 0px;
+                margin-right: 10px;
+                svg{
+                    margin-right: 5px;
+                }
+            }
+        }
+    }
+    .problems{
+        padding: 10px;
+    }
+    .submit{
+        padding: 10px;
+        button{
+            padding: 10px;
+            text-transform: uppercase;
+        }
+        button:disabled{
+            opacity: 0.2;
+            cursor: not-allowed;
+        }
+        margin: 20px auto;
+    }
+
+    .fotter{
+        color: black;
+        a{
+            color: black !important;
+        }
+    }
+}

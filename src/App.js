@@ -10,6 +10,7 @@ import AttemptCodingProblem from './components/coding/AttemptCodingProblem';
 import CodingProblemEditor from './components/coding/CodingProblemEditor';
 import QuizEditor from './components/quizlet/QuizEditor';
 import {TOKEN_STRING} from './helpers/CONSTANTS';
+import AttempQuiz from './components/quizlet/AttemptQuiz';
 
 // defines the private route
 const PrivateRoute = ({component : Component, ...rest}) => {
@@ -38,6 +39,7 @@ export default function App() {
 					<Route exact path="/course/the-complete-c-course/quizzes" 
 						component={()=> <CoursePage type="quizzes" courseId='the-complete-c-course' />} />
 					<Route exact path="/problem/:problemId" component={AttemptCodingProblem} />
+					<Route exact path="/quiz/:quizId" component={AttempQuiz} />
 					<Route exact path="/localStorage" component={LocalStorage} />
 
 					<PrivateRoute exact path="/admin/new/problem" component={CodingProblemEditor} />

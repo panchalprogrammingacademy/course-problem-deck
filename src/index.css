@@ -26,7 +26,7 @@ code {
   cursor: pointer;
   font-family: 'Libre Baskerville', serif; 
 }
-.success, .danger{
+.success, .danger, .info, .secondary{
   margin-right: 10px;
   padding: 5px;
   border-radius: 5px;
@@ -39,4 +39,21 @@ code {
 .danger{
   background-color: #dc3543;
   color: white;
+}
+.info{
+  background-color: #17a2b8;
+  color: white;  
+}
+.secondary{
+  background-color: #6c757d;
+  color: white;
+}
+.fs-20{
+  font-size: 20px;
+}
+.disabled{
+  cursor: not-allowed;
+}
+.full-width{
+  width: 100%;
 }
