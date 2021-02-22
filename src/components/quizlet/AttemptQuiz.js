@@ -108,7 +108,7 @@ export default function AttempQuiz(props) {
                     {!submitted && quiz.timeLimit > 0 && 
                         <Timer 
                             time={quiz.timeLimit * 60}
-                            onFinish={()=> setSubmitted(true)}
+                            onFinish={()=> submitQuizHandler()}
                         />
                     }
                     <span className="button info fs-20">

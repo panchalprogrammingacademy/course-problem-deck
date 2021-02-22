@@ -82,6 +82,8 @@ class Question extends React.Component{
         let headersClassList = ['question-header'];
         if (correct)    headersClassList.push('correct');
         if (incorrect)  headersClassList.push('incorrect');
+        // remove unnecessary extra spaces in string
+        problemStatement = problemStatement.replaceAll(/(<p><br><\/p>)+/g, '');
 
         // actual ui to be rendered
         return (

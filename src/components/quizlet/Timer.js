@@ -9,7 +9,7 @@ const formatTime = (time) => {
 };
 export default function Timer(props){
     let {onFinish} = props;
-    const [time, setTime] = useState(100);
+    const [time, setTime] = useState(props.time);
     useEffect(()=>{
         let timeInterval = window.setInterval(()=>{            
             let timeRemaining = 0;
